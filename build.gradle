@@ -11,6 +11,7 @@ repositories {
 
 dependencies {
     testCompile 'junit:junit:4.12'
+    testCompile 'com.netflix.nebula:nebula-test:3.0.0'
 }
 
 task wrapper(type: Wrapper, description: 'Gradle Wrapper task') {
