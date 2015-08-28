@@ -1,5 +1,4 @@
 package net.franz_becker.gradle.lombok
-
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
@@ -10,35 +9,66 @@ import org.gradle.plugins.ide.idea.IdeaPlugin
 /**
  * Plugin for project Lombok support.
  *
+ * The main responsibility is to add Lombok as a "provided" dependency which is
+ * only required during compilation and should not leave any trace on the resulting artifact.
+ *
+ * Furthermore, this plugin provides support for easy installation of Lombok into the IDE.
+ * For this purpose, it verifies the JAR it adds as dependency (using its SHA-256 hash) and
+ * the invokes it in order to call the default Lombok UI.
+ *
  * @see <a href="https://projectlombok.org">https://projectlombok.org</a>
  */
 class LombokPlugin implements Plugin<Project> {
 
-    static final NAME = "net.franz-becker.gradle-lombok"
-    static final LOMBOK_CONFIGURATION_NAME = "lombok"
+    static final String NAME = "net.franz-becker.gradle-lombok"
+    static final String LOMBOK_CONFIGURATION_NAME = "lombok"
 
     @Override
     void apply(Project project) {
-        project.extensions.create("lombok", LombokPluginExtension)
-        // TODO verify lombok JAR
+        // Register extension
+        project.extensions.create(LombokPluginExtension.NAME, LombokPluginExtension)
+
         project.plugins.withType(JavaPlugin) {
             def configuration = createLombokConfiguration(project)
-            addLombokDependency(project)
+            configureTasks(project)
             configureIdeaPlugin(project, configuration)
             configureEclipsePlugin(project, configuration)
         }
     }
 
-    // TODO can we maybe depend and reuse com.netflix.nebula:gradle-extra-configurations-plugin ?
+    /**
+     * Create a separate {@link Configuration} for the Lombok dependency.
+     */
     private Configuration createLombokConfiguration(Project project) {
-        def lombok = project.configurations.create(LOMBOK_CONFIGURATION_NAME)
-                .setVisible(false)
-                .setDescription("Additional compile classpath for Lombok.")
+        def configuration = project.configurations.create(LOMBOK_CONFIGURATION_NAME)
+            .setVisible(false)
+            .setDescription("Additional compile classpath for Lombok.")
+
+        project.dependencies.add(LOMBOK_CONFIGURATION_NAME, "org.projectlombok:lombok:${project.lombok.version}")
+
         def compile = project.configurations.getByName(JavaPlugin.COMPILE_CONFIGURATION_NAME)
-        compile.extendsFrom(lombok)
-        return lombok
+        compile.extendsFrom(configuration)
+        return configuration
     }
 
+    /**
+     * Adds {@link VerifyLombokTask} and {@link InstallLombokTask} and lets installLombok
+     * depend on verifyLombok.
+     */
+    private void configureTasks(Project project) {
+        // Add VerifyLombokTask
+        def verifyLombok = project.task(type: VerifyLombokTask, VerifyLombokTask.NAME)
+        verifyLombok.outputs.upToDateWhen { false }
+
+        // Add InstallLombokTask
+        def installLombok = project.task(type: InstallLombokTask, InstallLombokTask.NAME)
+        installLombok.outputs.upToDateWhen { false }
+        installLombok.dependsOn(verifyLombok)
+    }
+
+    /**
+     * If the Idea plugin is present, Lombok is added to its classpath.
+     */
     private void configureIdeaPlugin(Project project, Configuration lombok) {
         project.plugins.withType(IdeaPlugin) {
             project.idea.module {
@@ -47,15 +77,13 @@ class LombokPlugin implements Plugin<Project> {
         }
     }
 
+    /**
+     * If the Eclipse plugin is present, Lombok is added to its classpath.
+     */
     private void configureEclipsePlugin(Project project, Configuration lombok) {
         project.plugins.withType(EclipsePlugin) {
-            project.task(type: EclipseInstallerTask, EclipseInstallerTask.NAME)
             project.eclipse.classpath.plusConfigurations += [lombok]
         }
-    }
-
-    private void addLombokDependency(Project project) {
-        project.dependencies.add(LOMBOK_CONFIGURATION_NAME, "org.projectlombok:lombok:${project.lombok.version}")
     }
 
 }

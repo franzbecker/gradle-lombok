@@ -1,14 +1,16 @@
 package net.franz_becker.gradle.lombok
-
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
 import org.gradle.testfixtures.ProjectBuilder
 import spock.lang.Specification
 
-class EclipseInstallerTaskSpec extends Specification {
+/**
+ * Unit tests for {@link VerifyLombokTask}.
+ */
+class VerifyLombokTaskSpec extends Specification {
 
-    EclipseInstallerTask task
+    VerifyLombokTask task
     Configuration configuration = Mock()
 
     /**
@@ -19,7 +21,7 @@ class EclipseInstallerTaskSpec extends Specification {
         project.apply plugin: 'java'
         project.apply plugin: 'eclipse'
         project.apply plugin: LombokPlugin.NAME
-        task = project.tasks.getByName(EclipseInstallerTask.NAME)
+        task = project.tasks.getByName(VerifyLombokTask.NAME)
         configuration.iterator() >> Mock(Iterator)
     }
 
@@ -35,7 +37,7 @@ class EclipseInstallerTaskSpec extends Specification {
         e.message == "Could not find 'lombok-${version}.jar' in dependencies of configuration 'lombok'."
     }
 
-    def "Verifies file integrity"() {
+    def "Does not fail if file integrity is fulfilled"() {
         given:
         def file = new File(getClass().getClassLoader().getResource("dummy.txt").path)
         assert file.exists()
@@ -47,7 +49,7 @@ class EclipseInstallerTaskSpec extends Specification {
         noExceptionThrown()
     }
 
-    def "Fails if file integrity is not given"() {
+    def "Fails if file integrity is not fulfilled"() {
         given:
         def file = new File(getClass().getClassLoader().getResource("dummy.txt").path)
         assert file.exists()

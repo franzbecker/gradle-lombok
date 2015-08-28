@@ -1,30 +1,22 @@
 package net.franz_becker.gradle.lombok
+
 import net.franz_becker.gradle.lombok.util.HashUtil
+import org.gradle.api.DefaultTask
 import org.gradle.api.artifacts.Configuration
 import org.gradle.api.resources.ResourceException
-import org.gradle.api.tasks.JavaExec
+import org.gradle.api.tasks.TaskAction
 
 import static net.franz_becker.gradle.lombok.LombokPlugin.LOMBOK_CONFIGURATION_NAME
+
 /**
- * Installs the Lombok JAR as Eclipse Java agent.
- * <p>
- * It will look up the JAR from the dependencies, verify its integrity against the configured SHA-256 hash code
- * and finally execute {@code java -jar lombok-version.jar} to invoke the default Lombok installer.
- *
+ * Task that verifies the integrity of the Lombok dependency.
  */
-class EclipseInstallerTask extends JavaExec {
+class VerifyLombokTask extends DefaultTask {
 
-    static final NAME = "eclipseInstallLombok"
+    static final String NAME = "verifyLombok"
 
-    /**
-     * Configure the task to be never up-to-date.
-     */
-    public EclipseInstallerTask() {
-        getOutputs().upToDateWhen { false }
-    }
-
-    @Override
-    void exec() {
+    @TaskAction
+    void verifyLombok() {
         // Retrieve extension and configuration
         def extension = project.extensions.findByType(LombokPluginExtension)
         def configuration = project.configurations.getByName(LOMBOK_CONFIGURATION_NAME)
@@ -32,20 +24,12 @@ class EclipseInstallerTask extends JavaExec {
         // Lookup JAR and verify it
         def lombokJar = getLombokJar(extension.version, configuration)
         verifyIntegrity(extension.sha256, lombokJar)
-
-        // Configure JavaExec
-        setMain("lombok.launch.Main")
-        setIgnoreExitValue(true)
-        setClasspath(configuration)
-
-        logger.quiet("  Verified the integrity of '${lombokJar.name}'. its installer.")
-        super.exec()
     }
 
     /**
      * Retrieves the JAR from the dependencies.
      *
-     * @throws ResourceException if the JAR cannot be resolved
+     * @throws org.gradle.api.resources.ResourceException if the JAR cannot be resolved
      */
     protected File getLombokJar(String lombokVersion, Configuration configuration) {
         // Retrieve file

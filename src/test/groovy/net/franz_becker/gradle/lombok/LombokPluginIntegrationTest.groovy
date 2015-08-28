@@ -1,8 +1,11 @@
 package net.franz_becker.gradle.lombok
 
 import nebula.test.IntegrationSpec
+import spock.lang.Ignore
 
 class LombokPluginIntegrationTest extends IntegrationSpec {
+
+    private static final LOMBOK_VERSION = "1.16.4"
 
     def setup() {
         buildFile << """
@@ -12,6 +15,11 @@ class LombokPluginIntegrationTest extends IntegrationSpec {
             repositories {
                 jcenter()
             }
+
+            lombok {
+                version = "${LOMBOK_VERSION}"
+                sha256 = "3ca225ce3917eac8bf4b7d2186845df4e70dcdede356dca8537b6d78a535c91e"
+            }
         """.stripIndent()
     }
 
@@ -20,17 +28,22 @@ class LombokPluginIntegrationTest extends IntegrationSpec {
      * getter and setter are created properly by Lombok.
      */
     def "Can compile and test @Data annotation."() {
-        when:
+        given: "a valid build configuration"
         buildFile << """
             dependencies {
                 testCompile 'junit:junit:4.12'
             }
         """.stripIndent()
+
+        and: "source code to compile and test"
         createJavaSource()
         createTestSource()
+
+        when: "calling gradle test"
         runTasksSuccessfully('test')
 
-        then:
+        then: "build is successful and both class file exist"
+        noExceptionThrown()
         new File(projectDir, "build/classes/main/com/example/HelloWorld.class").exists()
         new File(projectDir, "build/classes/test/com/example/HelloWorldTest.class").exists()
     }
@@ -39,7 +52,7 @@ class LombokPluginIntegrationTest extends IntegrationSpec {
      * Verifies that the Lombok dependency does not occur in the generated POM.
      */
     def "Dependency does not occur in generated POM"() {
-        when:
+        given: "a valid build configuration"
         buildFile << """
             apply plugin: 'maven'
 
@@ -47,23 +60,67 @@ class LombokPluginIntegrationTest extends IntegrationSpec {
                 testCompile 'junit:junit:4.12'
             }
         """.stripIndent()
+
+        when: "calling gradle install"
         runTasksSuccessfully('install')
 
-        then:
-        // Check that the POM exists
+        then: "Verify that the POM exists"
         def pom = new File(projectDir, "build/poms/pom-default.xml")
         assert pom.exists()
 
-        // Parse XML and retrieve <dependencies> object
+        and: "Parse POM and retrieve <dependencies> object"
         def pomXml = new XmlSlurper().parseText(pom.text)
         def dependencies = pomXml.dependencies
         assert dependencies.size() == 1
 
-        // Retrieve junit and (potential) lombok dependency
+        and: "Verify that JUnit dependency exists"
         def junit = dependencies.dependency.find { it.artifactId.text() == 'junit' }
-        def lombok = dependencies.dependency.find { it.artifactId.text() == 'lombok' }
         assert junit
+
+        and: "Verify that Lombok dependency does not exist"
+        def lombok = dependencies.dependency.find { it.artifactId.text() == 'lombok' }
         assert !lombok
+    }
+
+    /**
+     * Verifies that the Lombok dependency is on the Eclipse classpath.
+     */
+    def "Lombok dependency is on Eclipse classpath"() {
+        given:
+        buildFile << """
+            apply plugin: 'eclipse'
+        """.stripIndent()
+
+        when:
+        runTasksSuccessfully('eclipse')
+
+        then: "verify that the .classpath file exists"
+        def dotClasspath = new File(projectDir, ".classpath")
+        dotClasspath.exists()
+
+        and: "verify the lombok JAR is included"
+        def classpath = new XmlSlurper().parse(dotClasspath)
+        def lombokEntry = classpath.classpathentry.find { node ->
+            node.@kind == "lib" && node.@path.text().contains("lombok-${LOMBOK_VERSION}.jar")
+        }
+        assert lombokEntry
+    }
+
+    /**
+     * Verifies that the Lombok dependency is on the IntelliJ classpath.
+     */
+    @Ignore
+    def "Lombok dependency is on IntelliJ classpath"() {
+        given:
+        buildFile << """
+            apply plugin: 'idea'
+        """.stripIndent()
+
+        when:
+        runTasksSuccessfully('idea')
+
+        then:
+        println "blubb"
     }
 
     private void createJavaSource() {

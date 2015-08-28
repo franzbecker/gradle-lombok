@@ -3,7 +3,7 @@ package net.franz_becker.gradle.lombok
 import nebula.test.PluginProjectSpec
 
 /**
- * Test the {@link LombokPlugin}.
+ * Unit tests for {@link LombokPlugin}.
  */
 class LombokPluginSpec extends PluginProjectSpec {
 
@@ -35,8 +35,8 @@ class LombokPluginSpec extends PluginProjectSpec {
 
     def "Add Lombok configuration and dependency if Java plugin is applied"() {
         when:
-        project.apply plugin: pluginName
         project.apply plugin: "java"
+        project.apply plugin: pluginName
 
         then:
         def lombokConfig = project.configurations.findByName(LombokPlugin.LOMBOK_CONFIGURATION_NAME)
@@ -46,18 +46,15 @@ class LombokPluginSpec extends PluginProjectSpec {
         assert project.configurations.collect { it.dependencies }.flatten().size() == 1
     }
 
-    // TODO if the order is pluginName, "eclipse", "java" this test fails
-    def "Add Lombok to the Eclipse classpath and installer task"() {
+    def "Add tasks if Java plugin is applied and installLombok depends on verifyLombok"() {
         when:
-        project.apply plugin: pluginName
         project.apply plugin: "java"
-        project.apply plugin: "eclipse"
+        project.apply plugin: pluginName
 
         then:
-        def lombokConfig = project.configurations.findByName(LombokPlugin.LOMBOK_CONFIGURATION_NAME)
-        assert lombokConfig
-        assert lombokConfig in project.eclipse.classpath.plusConfigurations
-        assert project.tasks[EclipseInstallerTask.NAME] instanceof EclipseInstallerTask
+        VerifyLombokTask verifyLombok = project.tasks[VerifyLombokTask.NAME]
+        InstallLombokTask installLombok = project.tasks[InstallLombokTask.NAME]
+        verifyLombok in installLombok.getDependsOn()
     }
 
 }
