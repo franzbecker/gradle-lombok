@@ -15,6 +15,8 @@ class VerifyLombokTask extends DefaultTask {
 
     static final String NAME = "verifyLombok"
 
+    HashUtil hashUtil = new HashUtil()
+
     @TaskAction
     void verifyLombok() {
         // Retrieve extension and configuration
@@ -47,7 +49,7 @@ class VerifyLombokTask extends DefaultTask {
      * Verifies the hash code of the passed file as configured.
      */
     protected void verifyIntegrity(String expectedSha256, File lombokJar) {
-        def actualSha256 = HashUtil.calculateSha256(lombokJar)
+        def actualSha256 = hashUtil.calculateSha256(lombokJar)
         if (expectedSha256 != actualSha256) {
             def message = """\
                 Verification of Lombok JAR failed!

@@ -21,7 +21,7 @@ public class HashUtil {
      * @param file the file
      * @return the SHA-256
      */
-    public static String calculateSha256(File file) {
+    public String calculateSha256(File file) {
         try (RandomAccessFile inputStream = new RandomAccessFile(file, "r"); FileChannel channel = inputStream.getChannel()) {
             // Calculate SHA-256
             MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
