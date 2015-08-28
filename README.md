@@ -27,7 +27,7 @@ A minimal `build.gradle` looks like this:
 	}
 
 
-After applying the plugin, the Lombok annotations can be used directly in any Java code and the Lombok IDE installer can be called via `gradlew installLombok`.
+After applying the plugin, the Lombok annotations can be used directly in any Java code and the Lombok Eclipse installer can be called via `gradlew installLombok`.
 
 Some example Java code to get started can be found in the [wiki](https://github.com/franzbecker/gradle-lombok/wiki/Lombok-getting-started).
 
@@ -37,7 +37,7 @@ Some example Java code to get started can be found in the [wiki](https://github.
 There are two issues this plugin addresses: 
 
 * Adding the dependency to the classpath in a non-intrusive way 
-* Simplifying IDE support
+* Simplifying the Eclipse IDE installation
 
 ## Adding Lombok dependency
 
@@ -65,11 +65,11 @@ What we really want for Lombok is to have a dependency only during compile time.
 	
 Note that the hash code is only used for the second issue this plugin addresses: the simplification of IDE support.
 
-## Simplifying IDE support
+## Simplifying Eclipse IDE installation
 
 The project Lombok website states:
 > NOTE: You'll still need to download lombok, or doubleclick on the lombok.jar file downloaded by maven / ivy / gradle, to install lombok into your eclipse installation.
  
-When using Lombok in teams with no automated IDE provisioning this is quite a pain. Every developer has to retrieve the JAR, verify its integrity (some won't) and call `java -jar lombok.jar`.
+When using Lombok in teams with no automated Eclipse provisioning this is quite a pain. Every developer has to retrieve the JAR, verify its integrity (some won't) and call `java -jar lombok.jar`.
 
 This plugin adds a task called `installLombok` to your Gradle build that uses the dependency that has already been added to the compile-only scope, verifies its integrity using SHA-256 and finally invokes the main class of the JAR. This greatly simplifies the described process for each developer on the team.
