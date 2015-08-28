@@ -21,7 +21,6 @@ class VerifyLombokTaskSpec extends Specification {
     void setup() {
         Project project = ProjectBuilder.builder().build()
         project.apply plugin: 'java'
-        project.apply plugin: 'eclipse'
         project.apply plugin: LombokPlugin.NAME
         task = project.tasks.getByName(VerifyLombokTask.NAME)
         configuration.iterator() >> Mock(Iterator)
