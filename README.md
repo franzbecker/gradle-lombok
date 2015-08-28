@@ -17,7 +17,7 @@ Currently the plugin is not in the official repository yet, so one has to add a 
 			}
 		}
 		dependencies {
-			classpath 'net.franz_becker:gradle-lombok:1.1'
+			classpath 'net.franz-becker:gradle-lombok:1.1'
 		}
 	}
 
