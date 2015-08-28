@@ -19,8 +19,13 @@ dependencies {
     testCompile 'org.apache.commons:commons-lang3:3.4'
 }
 
-task wrapper(type: Wrapper, description: 'Gradle Wrapper task') {
-    gradleVersion = '2.6'
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives sourcesJar
 }
 
 jacocoTestReport {
@@ -44,4 +49,8 @@ bintray {
             name = "${project.version}"
         }
     }
+}
+
+task wrapper(type: Wrapper, description: 'Gradle Wrapper task') {
+    gradleVersion = '2.6'
 }
