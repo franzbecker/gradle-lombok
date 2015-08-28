@@ -8,25 +8,23 @@
 A Gradle plugin for project [Lombok](https://projectlombok.org) support.
 
 # Usage
-Currently the plugin is not in the official repository yet, so one has to add a Bintray Maven repository. A minimal `build.gradle` using this plugin looks like this:
+The plugin is included in the [central plugin repository](https://plugins.gradle.org/plugin/net.franz-becker.gradle-lombok/1.1). 
 
-	buildscript {
-		repositories {
-			maven {
-				url "http://dl.bintray.com/franzbecker/maven"
-			}
-		}
-		dependencies {
-			classpath 'net.franz-becker:gradle-lombok:1.1'
-		}
+A minimal `build.gradle` looks like this:
+
+	plugins {
+		id 'net.franz-becker.gradle-lombok' version '1.1'
+		id 'java'
 	}
-
+	
 	repositories {
-    	jcenter() // or Maven central, required for Lombok dependency
+		jcenter() // or Maven central, required for Lombok dependency
 	}
 
-	apply plugin: 'java'
-	apply plugin: 'net.franz-becker.gradle-lombok'
+After applying the plugin, the Lombok annotations can be used directly in any Java code and the Lombok IDE installer can be called via `gradlew installLombok`.
+
+Some example Java code to get started can be found in the [wiki](https://github.com/franzbecker/gradle-lombok/wiki/Lombok-getting-started).
+
 
 # Motivation
 
