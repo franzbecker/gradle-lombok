@@ -72,7 +72,7 @@ class LombokPlugin implements Plugin<Project> {
     private void configureIdeaPlugin(Project project, Configuration lombok) {
         project.plugins.withType(IdeaPlugin) {
             project.idea.module {
-                scopes.PROVIDED.plus += lombok
+                scopes.PROVIDED.plus += [lombok]
             }
         }
     }

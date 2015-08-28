@@ -1,8 +1,9 @@
 package net.franz_becker.gradle.lombok
-
 import nebula.test.IntegrationSpec
-import spock.lang.Ignore
 
+/**
+ * Integration tests for {@link LombokPlugin}.
+ */
 class LombokPluginIntegrationTest extends IntegrationSpec {
 
     private static final LOMBOK_VERSION = "1.16.4"
@@ -109,7 +110,6 @@ class LombokPluginIntegrationTest extends IntegrationSpec {
     /**
      * Verifies that the Lombok dependency is on the IntelliJ classpath.
      */
-    @Ignore
     def "Lombok dependency is on IntelliJ classpath"() {
         given:
         buildFile << """
@@ -119,8 +119,22 @@ class LombokPluginIntegrationTest extends IntegrationSpec {
         when:
         runTasksSuccessfully('idea')
 
-        then:
-        println "blubb"
+        then: "verify that the .iml file exists"
+        File imlFile = getImlFile()
+
+        and: "verify the lombok JAR is included"
+        def module = new XmlSlurper().parse(imlFile)
+        def provided = module.component.orderEntry.find { it.@scope == "PROVIDED" }
+        assert provided
+        def lombokEntry = provided.library.CLASSES.root.find { it.@url.text().contains("lombok-${LOMBOK_VERSION}.jar") }
+        assert lombokEntry
+    }
+
+    private File getImlFile() {
+        FilenameFilter filter = { dir, name -> name.endsWith(".iml") }
+        File[] imlFiles = projectDir.listFiles(filter)
+        assert imlFiles.size() == 1
+        return imlFiles[0]
     }
 
     private void createJavaSource() {
