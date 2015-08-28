@@ -28,7 +28,7 @@ This will add the Lombok dependency to your project using the `provided` scope. 
 
 In Gradle there is no `provided` scope by default. There are plugins addressing this issue such as the excellent [gradle-extra-configurations-plugin](https://github.com/nebula-plugins/gradle-extra-configurations-plugin) (which inspired this plugin) that provide this scope, or the `war` plugin with its `providedCompile` scope, but they implement the same semantic as Maven.
 
-What we really want for Lombok is to have a dependency only during compile time. This is provided by this plugin by creating a new scope and applying the Lombok dependency to it. You can change easily change the applied version by configuration:
+What we really want for Lombok is to have a dependency only during compile time. This is provided by this plugin by creating a new scope and applying the Lombok dependency to it. You can easily change the applied version by configuration:
 
 	lombok {
 		version = 1.16.6
