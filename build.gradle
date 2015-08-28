@@ -4,6 +4,7 @@ version currentVersion
 apply plugin: 'java-gradle-plugin'
 apply plugin: 'groovy'
 apply plugin: 'maven'
+apply plugin: 'jacoco'
 
 repositories {
     jcenter()
@@ -12,6 +13,7 @@ repositories {
 dependencies {
     testCompile 'junit:junit:4.12'
     testCompile 'com.netflix.nebula:nebula-test:3.0.0'
+    testCompile 'org.apache.commons:commons-lang3:3.4'
 }
 
 task wrapper(type: Wrapper, description: 'Gradle Wrapper task') {
