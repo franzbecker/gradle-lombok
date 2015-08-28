@@ -1,28 +1,45 @@
 package net.franz_becker.gradle.lombok
-
 import net.franz_becker.gradle.lombok.util.HashUtil
-import org.gradle.api.DefaultTask
 import org.gradle.api.artifacts.Configuration
 import org.gradle.api.resources.ResourceException
-import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.JavaExec
 
+import static net.franz_becker.gradle.lombok.LombokPlugin.LOMBOK_CONFIGURATION_NAME
 /**
- * Created by becker on 18.08.15.
+ * Installs the Lombok JAR as Eclipse Java agent.
+ * <p>
+ * It will look up the JAR from the dependencies, verify its integrity against the configured SHA-256 hash code
+ * and finally execute {@code java -jar lombok-version.jar} to invoke the default Lombok installer.
+ *
  */
-class EclipseInstallerTask extends DefaultTask {
+class EclipseInstallerTask extends JavaExec {
 
     static final NAME = "eclipseInstallLombok"
 
-    @TaskAction
-    def installLombok() {
+    /**
+     * Configure the task to be never up-to-date.
+     */
+    public EclipseInstallerTask() {
+        getOutputs().upToDateWhen { false }
+    }
+
+    @Override
+    void exec() {
         // Retrieve extension and configuration
         def extension = project.extensions.findByType(LombokPluginExtension)
-        def configuration = project.configurations.getByName(LombokPlugin.LOMBOK_CONFIGURATION_NAME)
+        def configuration = project.configurations.getByName(LOMBOK_CONFIGURATION_NAME)
 
-        // Lookup JAR
+        // Lookup JAR and verify it
         def lombokJar = getLombokJar(extension.version, configuration)
         verifyIntegrity(extension.sha256, lombokJar)
-        println "Got and verified Lombok JAR"
+
+        // Configure JavaExec
+        setMain("lombok.launch.Main")
+        setIgnoreExitValue(true)
+        setClasspath(configuration)
+
+        logger.quiet("  Verified the integrity of '${lombokJar.name}'. its installer.")
+        super.exec()
     }
 
     /**
@@ -33,10 +50,12 @@ class EclipseInstallerTask extends DefaultTask {
     protected File getLombokJar(String lombokVersion, Configuration configuration) {
         // Retrieve file
         def lombokFileName = "lombok-${lombokVersion}.jar"
+        logger.debug("Searching for '${lombokFileName}' in dependencies of configuration '${LOMBOK_CONFIGURATION_NAME}'.")
         def lombokJar = configuration.find { File file -> file.name == lombokFileName }
         if (!lombokJar) {
-            throw new ResourceException("Could not resolve '${lombokFileName}'!")
+            throw new ResourceException("Could not find '${lombokFileName}' in dependencies of configuration '${LOMBOK_CONFIGURATION_NAME}'.")
         }
+        logger.debug("Found '${lombokJar}'.")
         return lombokJar
     }
 
@@ -56,6 +75,7 @@ class EclipseInstallerTask extends DefaultTask {
             """.stripIndent()
             throw new ResourceException(message)
         }
+        logger.debug("Calculates matching hash '${actualSha256}' for '${lombokJar}'.")
     }
 
 }

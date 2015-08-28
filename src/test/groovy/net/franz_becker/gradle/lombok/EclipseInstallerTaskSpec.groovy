@@ -32,7 +32,7 @@ class EclipseInstallerTaskSpec extends Specification {
 
         then:
         GradleException e = thrown()
-        e.message == "Could not resolve 'lombok-${version}.jar'!"
+        e.message == "Could not find 'lombok-${version}.jar' in dependencies of configuration 'lombok'."
     }
 
     def "Verifies file integrity"() {
