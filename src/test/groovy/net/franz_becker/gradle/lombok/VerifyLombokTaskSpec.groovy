@@ -1,4 +1,6 @@
 package net.franz_becker.gradle.lombok
+
+import net.franz_becker.gradle.lombok.util.HashUtilSpec
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration

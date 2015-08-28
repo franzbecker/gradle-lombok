@@ -1,8 +1,6 @@
-package net.franz_becker.gradle.lombok
+package net.franz_becker.gradle.lombok.util
 
-import net.franz_becker.gradle.lombok.util.HashUtil
 import spock.lang.Specification
-
 /**
  * Simple test for {@link HashUtil}.
  */
