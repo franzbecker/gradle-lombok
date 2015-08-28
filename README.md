@@ -1,9 +1,32 @@
 # gradle-lombok
-[![License](http://img.shields.io/badge/license-APACHE2-blue.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0.html)
+[![License](http://img.shields.io/badge/license-Apache_2.0-blue.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0.html)
+[![Download](https://api.bintray.com/packages/franzbecker/maven/gradle-lombok-plugin/images/download.svg) ](https://bintray.com/franzbecker/maven/gradle-lombok-plugin/_latestVersion)
 [![Build Status](https://travis-ci.org/franzbecker/gradle-lombok.svg?branch=master)](https://travis-ci.org/franzbecker/gradle-lombok)
 [![codecov.io](http://codecov.io/github/franzbecker/gradle-lombok/coverage.svg?branch=master)](http://codecov.io/github/franzbecker/gradle-lombok?branch=master)
 
+
 A Gradle plugin for project [Lombok](https://projectlombok.org) support.
+
+# Usage
+Currently the plugin is not in the official repository yet, so one has to add a Bintray Maven repository. A minimal `build.gradle` using this plugin looks like this:
+
+	buildscript {
+		repositories {
+			maven {
+				url "http://dl.bintray.com/franzbecker/maven"
+			}
+		}
+		dependencies {
+			classpath 'net.franz_becker:gradle-lombok:1.1'
+		}
+	}
+
+	repositories {
+    	jcenter() // or Maven central, required for Lombok dependency
+	}
+
+	apply plugin: 'java'
+	apply plugin: 'net.franz-becker.gradle-lombok'
 
 # Motivation
 
