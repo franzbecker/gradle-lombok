@@ -19,3 +19,12 @@ dependencies {
 task wrapper(type: Wrapper, description: 'Gradle Wrapper task') {
     gradleVersion = '2.6'
 }
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+}
+
+check.dependsOn jacocoTestReport
