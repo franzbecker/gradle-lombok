@@ -7,7 +7,7 @@ class LombokPluginIntegrationTest extends IntegrationSpec {
     def setup() {
         buildFile << """
             apply plugin: 'java'
-            apply plugin: 'net.franz-becker.gradle-lombok'
+            apply plugin: '${LombokPlugin.NAME}'
 
             repositories {
                 jcenter()

@@ -14,13 +14,12 @@ import org.gradle.plugins.ide.idea.IdeaPlugin
  */
 class LombokPlugin implements Plugin<Project> {
 
+    static final NAME = "net.franz-becker.gradle-lombok"
     static final LOMBOK_CONFIGURATION_NAME = "lombok"
 
     @Override
     void apply(Project project) {
         project.extensions.create("lombok", LombokPluginExtension)
-
-        // TODO add lombok to compile class path
         // TODO verify lombok JAR
         project.plugins.withType(JavaPlugin) {
             def configuration = createLombokConfiguration(project)

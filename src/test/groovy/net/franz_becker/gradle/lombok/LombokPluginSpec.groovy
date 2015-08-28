@@ -1,9 +1,6 @@
 package net.franz_becker.gradle.lombok
 
 import nebula.test.PluginProjectSpec
-import org.gradle.api.artifacts.Configuration
-import org.gradle.api.tasks.compile.JavaCompile
-import org.gradle.jvm.tasks.Jar
 
 /**
  * Test the {@link LombokPlugin}.
