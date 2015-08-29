@@ -69,3 +69,16 @@ pluginBundle {
 task wrapper(type: Wrapper, description: 'Gradle Wrapper task') {
     gradleVersion = '2.6'
 }
+
+task updateReadmeVersion << {
+    def versionPattern = /\d+.\d+(.\d+)?/
+    def encoding = 'UTF-8'
+    File file = new File("README.md")
+
+    // String replacements - Readme isn't long enough to justify advanced code ;)
+    String text = file.getText(encoding)
+    text = text.replaceAll("gradle-lombok' version '${versionPattern}'", "gradle-lombok' version '${project.version}'")
+    text = text.replaceAll("gradle-lombok/${versionPattern}", "gradle-lombok/${project.version}")
+
+    file.setText(text, encoding)
+}
