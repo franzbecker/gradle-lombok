@@ -22,7 +22,7 @@ A minimal `build.gradle` looks like this:
 	}
 
 	lombok { // optional: values below are the defaults
-		version = 1.16.6
+		version = 1.16.4
 		sha256 = "3ca225ce3917eac8bf4b7d2186845df4e70dcdede356dca8537b6d78a535c91e"
 	}
 
@@ -47,7 +47,7 @@ In Maven you would typically do something like this:
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.16.6</version>
+			<version>1.16.4</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
@@ -59,7 +59,7 @@ In Gradle there is no `provided` scope by default. There are plugins addressing 
 What we really want for Lombok is to have a dependency only during compile time. This is provided by this plugin by creating a new scope and applying the Lombok dependency to it. You can easily change the applied version by configuration:
 
 	lombok {
-		version = 1.16.6
+		version = 1.16.4
 		sha256 = "3ca225ce3917eac8bf4b7d2186845df4e70dcdede356dca8537b6d78a535c91e"
 	}
 	
