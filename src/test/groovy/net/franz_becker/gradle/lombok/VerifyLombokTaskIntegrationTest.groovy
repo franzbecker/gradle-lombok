@@ -1,6 +1,5 @@
 package net.franz_becker.gradle.lombok
 
-import nebula.test.IntegrationSpec
 import org.gradle.api.GradleException
 
 import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCauseMessage
@@ -8,19 +7,7 @@ import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCauseMess
 /**
  * Integration tests for {@link VerifyLombokTask}.
  */
-class VerifyLombokTaskIntegrationTest extends IntegrationSpec {
-
-    def setup() {
-        buildFile << """
-            apply plugin: 'java'
-            apply plugin: 'eclipse'
-            apply plugin: '${LombokPlugin.NAME}'
-
-            repositories {
-                jcenter()
-            }
-        """.stripIndent()
-    }
+class VerifyLombokTaskIntegrationTest extends AbstractIntegrationTest {
 
     def "Task succeeds if hash is valid"() {
         given: "a properly configured hash"

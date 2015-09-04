@@ -61,9 +61,10 @@ class LombokPlugin implements Plugin<Project> {
         verifyLombok.outputs.upToDateWhen { false }
 
         // Add InstallLombokTask
-        def installLombok = project.task(type: InstallLombokTask, InstallLombokTask.NAME)
-        installLombok.outputs.upToDateWhen { false }
-        installLombok.dependsOn(verifyLombok)
+        project.task(type: InstallLombokTask, InstallLombokTask.NAME).with {
+            outputs.upToDateWhen { false }
+            dependsOn verifyLombok
+        }
     }
 
     /**
