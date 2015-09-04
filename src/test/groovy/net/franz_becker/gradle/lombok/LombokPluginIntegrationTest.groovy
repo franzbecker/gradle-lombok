@@ -50,6 +50,31 @@ class LombokPluginIntegrationTest extends IntegrationSpec {
     }
 
     /**
+     * Creates a Java class with a method annotated with @SneakyThrows and tests if the
+     * annotation is applied properly.
+     */
+    def "Can compile and test code with @SneakyThrows annotation."() {
+        given: "a valid build configuration"
+        buildFile << """
+            dependencies {
+                testCompile 'junit:junit:4.12'
+            }
+        """.stripIndent()
+
+        and: "source code with @SneakyThrows to compile and test"
+        createSneakyThrowsJavaSource()
+        createSneakyThrowsTestCode()
+
+        when: "calling gradle test"
+        runTasksSuccessfully('test')
+
+        then: "build is successful and both class file exist"
+        noExceptionThrown()
+        new File(projectDir, "build/classes/main/com/example/SneakyHelloWorld.class").exists()
+        new File(projectDir, "build/classes/test/com/example/SneakyHelloWorldTest.class").exists()
+    }
+
+    /**
      * Verifies that the Lombok dependency does not occur in the generated POM.
      */
     def "Dependency does not occur in generated POM"() {
@@ -178,6 +203,47 @@ class LombokPluginIntegrationTest extends IntegrationSpec {
                 }
 
             }
+        """.stripIndent()
+    }
+
+    private void createSneakyThrowsJavaSource() {
+        def file = createFile("src/main/java/com/example/SneakyHelloWorld.java")
+        file << """
+            package com.example;
+
+            import lombok.SneakyThrows;
+            import java.io.UnsupportedEncodingException; // checked exception
+
+            public class SneakyHelloWorld {
+
+                @SneakyThrows(UnsupportedEncodingException.class)
+                public byte[] throwingStuff() {
+                    return "test".getBytes("unsupported");
+                }
+
+            }
+        """.stripIndent()
+    }
+
+    private void createSneakyThrowsTestCode() {
+        def file = createFile("src/test/java/com/example/SneakyHelloWorldTest.java")
+        file << """
+            package com.example;
+
+            import org.junit.Assert;
+            import org.junit.Test;
+            import java.io.UnsupportedEncodingException;
+
+            public class SneakyHelloWorldTest {
+
+                @Test(expected = UnsupportedEncodingException.class)
+                public void testThrowingStuff() {
+                    SneakyHelloWorld instance = new SneakyHelloWorld();
+                    instance.throwingStuff();
+                }
+
+            }
+
         """.stripIndent()
     }
 
