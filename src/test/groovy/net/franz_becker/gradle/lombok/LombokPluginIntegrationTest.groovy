@@ -1,4 +1,5 @@
 package net.franz_becker.gradle.lombok
+
 /**
  * Integration tests for {@link LombokPlugin}.
  */

@@ -1,8 +1,7 @@
-package net.franz_becker.gradle.lombok
-
+package net.franz_becker.gradle.lombok.task
+import net.franz_becker.gradle.lombok.LombokPlugin
+import net.franz_becker.gradle.lombok.LombokPluginExtension
 import org.gradle.api.tasks.JavaExec
-
-import static net.franz_becker.gradle.lombok.LombokPlugin.LOMBOK_CONFIGURATION_NAME
 
 /**
  * Invokes the Lombok UI so that the user can install it into the IDE.
@@ -15,7 +14,7 @@ class InstallLombokTask extends JavaExec {
     void exec() {
         // Retrieve extension and configuration
         def extension = project.extensions.findByType(LombokPluginExtension)
-        def configuration = project.configurations.getByName(LOMBOK_CONFIGURATION_NAME)
+        def configuration = project.configurations.getByName(LombokPlugin.LOMBOK_CONFIGURATION_NAME)
 
         // Configure JavaExec
         setMain(extension.main)

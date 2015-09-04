@@ -1,6 +1,8 @@
 package net.franz_becker.gradle.lombok
 
 import nebula.test.PluginProjectSpec
+import net.franz_becker.gradle.lombok.task.InstallLombokTask
+import net.franz_becker.gradle.lombok.task.VerifyLombokTask
 
 /**
  * Unit tests for {@link LombokPlugin}.

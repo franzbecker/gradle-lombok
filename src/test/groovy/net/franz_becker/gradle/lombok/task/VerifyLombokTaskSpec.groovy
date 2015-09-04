@@ -1,5 +1,5 @@
-package net.franz_becker.gradle.lombok
-
+package net.franz_becker.gradle.lombok.task
+import net.franz_becker.gradle.lombok.LombokPlugin
 import net.franz_becker.gradle.lombok.util.HashUtilSpec
 import org.gradle.api.GradleException
 import org.gradle.api.Project
@@ -8,7 +8,7 @@ import org.gradle.testfixtures.ProjectBuilder
 import spock.lang.Specification
 
 /**
- * Unit tests for {@link VerifyLombokTask}.
+ * Unit tests for {@link net.franz_becker.gradle.lombok.task.VerifyLombokTask}.
  */
 class VerifyLombokTaskSpec extends Specification {
 
