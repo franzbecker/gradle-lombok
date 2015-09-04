@@ -7,3 +7,4 @@ cache:
   - $HOME/.gradle
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+  - ./travis-publishOnRelease.sh
