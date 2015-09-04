@@ -10,6 +10,9 @@ plugins {
 group 'net.franz-becker'
 version currentVersion
 
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
 repositories {
     jcenter()
 }
