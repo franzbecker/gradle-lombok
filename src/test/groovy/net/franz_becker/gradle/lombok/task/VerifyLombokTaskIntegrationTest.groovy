@@ -5,7 +5,7 @@ import org.gradle.api.GradleException
 import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCauseMessage
 
 /**
- * Integration tests for {@link net.franz_becker.gradle.lombok.task.VerifyLombokTask}.
+ * Integration tests for {@link VerifyLombokTask}.
  */
 class VerifyLombokTaskIntegrationTest extends AbstractIntegrationTest {
 

@@ -8,7 +8,7 @@ import org.gradle.testfixtures.ProjectBuilder
 import spock.lang.Specification
 
 /**
- * Unit tests for {@link net.franz_becker.gradle.lombok.task.VerifyLombokTask}.
+ * Unit tests for {@link VerifyLombokTask}.
  */
 class VerifyLombokTaskSpec extends Specification {
 
