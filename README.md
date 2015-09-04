@@ -22,7 +22,7 @@ A minimal `build.gradle` looks like this:
 	}
 
 	lombok { // optional: values below are the defaults
-		version = 1.16.4
+		version = "1.16.4"
 		sha256 = "3ca225ce3917eac8bf4b7d2186845df4e70dcdede356dca8537b6d78a535c91e"
 	}
 
