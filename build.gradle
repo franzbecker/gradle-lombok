@@ -1,6 +1,7 @@
 plugins {
     id 'com.jfrog.bintray' version '1.3.1'
     id 'com.gradle.plugin-publish' version '0.9.1'
+    id 'net.researchgate.release' version '2.2.1'
     id 'java-gradle-plugin'
     id 'groovy'
     id 'maven'
@@ -8,7 +9,6 @@ plugins {
 }
 
 group 'net.franz-becker'
-version currentVersion
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
@@ -85,3 +85,17 @@ task updateReadmeVersion << {
 
     file.setText(text, encoding)
 }
+updateReadmeVersion.shouldRunAfter tasks.getByName('confirmReleaseVersion')
+
+/*
+ * Configure release plugin.
+ * Remove tasks "updateVersion" and "commitNewVersion" as we don't want the new SNAPSHOT
+ * version commit on the master branch.
+ */
+tasks.release.tasks -= ["updateVersion", "commitNewVersion"]
+release {
+    preTagCommitMessage = '[release] '
+    tagCommitMessage = '[release] '
+    tagTemplate = 'v${version}'
+}
+tasks.getByName('preTagCommit').dependsOn updateReadmeVersion
