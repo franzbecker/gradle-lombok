@@ -1,12 +1,11 @@
-package net.franz_becker.gradle.lombok
-
+package net.franz_becker.gradle.lombok.task
+import net.franz_becker.gradle.lombok.LombokPlugin
+import net.franz_becker.gradle.lombok.LombokPluginExtension
 import net.franz_becker.gradle.lombok.util.HashUtil
 import org.gradle.api.DefaultTask
 import org.gradle.api.artifacts.Configuration
 import org.gradle.api.resources.ResourceException
 import org.gradle.api.tasks.TaskAction
-
-import static net.franz_becker.gradle.lombok.LombokPlugin.LOMBOK_CONFIGURATION_NAME
 
 /**
  * Task that verifies the integrity of the Lombok dependency.
@@ -21,7 +20,7 @@ class VerifyLombokTask extends DefaultTask {
     void verifyLombok() {
         // Retrieve extension and configuration
         def extension = project.extensions.findByType(LombokPluginExtension)
-        def configuration = project.configurations.getByName(LOMBOK_CONFIGURATION_NAME)
+        def configuration = project.configurations.getByName(LombokPlugin.LOMBOK_CONFIGURATION_NAME)
 
         // Lookup JAR and verify it
         def lombokJar = getLombokJar(extension.version, configuration)
@@ -36,10 +35,10 @@ class VerifyLombokTask extends DefaultTask {
     protected File getLombokJar(String lombokVersion, Configuration configuration) {
         // Retrieve file
         def lombokFileName = "lombok-${lombokVersion}.jar"
-        logger.debug("Searching for '${lombokFileName}' in dependencies of configuration '${LOMBOK_CONFIGURATION_NAME}'.")
+        logger.debug("Searching for '${lombokFileName}' in dependencies of configuration '${LombokPlugin.LOMBOK_CONFIGURATION_NAME}'.")
         def lombokJar = configuration.find { File file -> file.name == lombokFileName }
         if (!lombokJar) {
-            throw new ResourceException("Could not find '${lombokFileName}' in dependencies of configuration '${LOMBOK_CONFIGURATION_NAME}'.")
+            throw new ResourceException("Could not find '${lombokFileName}' in dependencies of configuration '${LombokPlugin.LOMBOK_CONFIGURATION_NAME}'.")
         }
         logger.debug("Found '${lombokJar}'.")
         return lombokJar

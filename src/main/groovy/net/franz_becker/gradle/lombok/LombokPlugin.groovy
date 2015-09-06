@@ -1,4 +1,7 @@
 package net.franz_becker.gradle.lombok
+
+import net.franz_becker.gradle.lombok.task.InstallLombokTask
+import net.franz_becker.gradle.lombok.task.VerifyLombokTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
@@ -61,9 +64,10 @@ class LombokPlugin implements Plugin<Project> {
         verifyLombok.outputs.upToDateWhen { false }
 
         // Add InstallLombokTask
-        def installLombok = project.task(type: InstallLombokTask, InstallLombokTask.NAME)
-        installLombok.outputs.upToDateWhen { false }
-        installLombok.dependsOn(verifyLombok)
+        project.task(type: InstallLombokTask, InstallLombokTask.NAME).with {
+            outputs.upToDateWhen { false }
+            dependsOn verifyLombok
+        }
     }
 
     /**

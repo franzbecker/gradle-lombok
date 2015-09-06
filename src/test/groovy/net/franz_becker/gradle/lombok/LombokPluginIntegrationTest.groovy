@@ -1,22 +1,14 @@
 package net.franz_becker.gradle.lombok
-import nebula.test.IntegrationSpec
 
 /**
  * Integration tests for {@link LombokPlugin}.
  */
-class LombokPluginIntegrationTest extends IntegrationSpec {
+class LombokPluginIntegrationTest extends AbstractIntegrationTest {
 
     private static final LOMBOK_VERSION = "1.16.4"
 
     def setup() {
         buildFile << """
-            apply plugin: 'java'
-            apply plugin: '${LombokPlugin.NAME}'
-
-            repositories {
-                jcenter()
-            }
-
             lombok {
                 version = "${LOMBOK_VERSION}"
                 sha256 = "3ca225ce3917eac8bf4b7d2186845df4e70dcdede356dca8537b6d78a535c91e"
