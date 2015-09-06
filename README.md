@@ -8,12 +8,12 @@
 A Gradle plugin for project [Lombok](https://projectlombok.org) support.
 
 # Usage
-The plugin is included in the [central plugin repository](https://plugins.gradle.org/plugin/net.franz-becker.gradle-lombok/1.2). 
+The plugin is included in the [central plugin repository](https://plugins.gradle.org/plugin/net.franz-becker.gradle-lombok/1.3). 
 
 A minimal `build.gradle` looks like this:
 
 	plugins {
-		id 'net.franz-becker.gradle-lombok' version '1.2'
+		id 'net.franz-becker.gradle-lombok' version '1.3'
 		id 'java'
 	}
 	
