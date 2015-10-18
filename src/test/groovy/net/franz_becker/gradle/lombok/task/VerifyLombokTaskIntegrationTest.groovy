@@ -25,6 +25,22 @@ class VerifyLombokTaskIntegrationTest extends AbstractIntegrationTest {
         noExceptionThrown()
     }
 
+    def "Task succeeds with non-default Lombok version"() {
+        given: "a properly configured hash"
+        buildFile << """
+            lombok {
+                version = "1.16.6"
+                sha256 = "e0a471be03e1e6b02bf019480cec7a3ac9801702bf7bf62f15d077ad4df8dd5d"
+            }
+        """.stripIndent()
+
+        when: "invoking the task"
+        runTasksSuccessfully(VerifyLombokTask.NAME)
+
+        then: "task succeeded without exception"
+        noExceptionThrown()
+    }
+
     def "Task fails if hash is invalid"() {
         given: "a badly configured hash"
         buildFile << """

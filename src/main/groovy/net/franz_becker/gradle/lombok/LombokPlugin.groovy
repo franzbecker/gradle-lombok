@@ -47,7 +47,9 @@ class LombokPlugin implements Plugin<Project> {
             .setVisible(false)
             .setDescription("Additional compile classpath for Lombok.")
 
-        project.dependencies.add(LOMBOK_CONFIGURATION_NAME, "org.projectlombok:lombok:${project.lombok.version}")
+        project.afterEvaluate {
+            project.dependencies.add(LOMBOK_CONFIGURATION_NAME, "org.projectlombok:lombok:${project.lombok.version}")
+        }
 
         def compile = project.configurations.getByName(JavaPlugin.COMPILE_CONFIGURATION_NAME)
         compile.extendsFrom(configuration)

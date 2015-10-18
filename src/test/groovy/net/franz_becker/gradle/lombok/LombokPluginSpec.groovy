@@ -26,26 +26,21 @@ class LombokPluginSpec extends PluginProjectSpec {
         assert afterTaskMap == beforeTaskMap
     }
 
-    def "Does not add Lombok dependency if Java plugin is not applied"() {
+    def "Does not add Lombok configuration if Java plugin is not applied"() {
         when:
         project.apply plugin: pluginName
 
         then:
         assert !project.configurations.findByName(LombokPlugin.LOMBOK_CONFIGURATION_NAME)
-        assert project.configurations.collect { it.dependencies }.flatten().size() == 0
     }
 
-    def "Add Lombok configuration and dependency if Java plugin is applied"() {
+    def "Add Lombok configuration if Java plugin is applied"() {
         when:
         project.apply plugin: "java"
         project.apply plugin: pluginName
 
         then:
-        def lombokConfig = project.configurations.findByName(LombokPlugin.LOMBOK_CONFIGURATION_NAME)
-        assert lombokConfig
-        assert lombokConfig.dependencies.size() == 1
-        assert lombokConfig.dependencies.first().name == "lombok"
-        assert project.configurations.collect { it.dependencies }.flatten().size() == 1
+        assert project.configurations.findByName(LombokPlugin.LOMBOK_CONFIGURATION_NAME)
     }
 
     def "Add tasks if Java plugin is applied and installLombok depends on verifyLombok"() {
