@@ -1,6 +1,7 @@
 package net.franz_becker.gradle.lombok.task
 import net.franz_becker.gradle.lombok.LombokPlugin
 import net.franz_becker.gradle.lombok.LombokPluginExtension
+import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.tasks.JavaExec
 
 /**
@@ -20,11 +21,12 @@ class DelombokTask extends JavaExec {
     void exec() {
         // Retrieve extension and configuration
         def extension = project.extensions.findByType(LombokPluginExtension)
-        def configuration = project.configurations.getByName(LombokPlugin.LOMBOK_CONFIGURATION_NAME)
+        def lombok = project.configurations.getByName(LombokPlugin.LOMBOK_CONFIGURATION_NAME)
+        def compile = project.configurations.getByName(JavaPlugin.COMPILE_CONFIGURATION_NAME)
 
         // Configure JavaExec
         setMain(extension.main)
-        setClasspath(configuration)
+        setClasspath(lombok + compile)
         super.exec()
     }
 

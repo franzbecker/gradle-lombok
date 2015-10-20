@@ -87,3 +87,5 @@ The plugin offers basic support for delomboking. The `DelombokTask` is a simple 
 	task delombokHelp(type: DelombokTask) {
 		args "--help"
 	}
+	
+The class path for the `JavaExec` task includes, by default, the dependencies of the `compile` and `lombok` configurations only.
