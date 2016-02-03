@@ -13,7 +13,7 @@ The plugin is included in the [central plugin repository](https://plugins.gradle
 A minimal `build.gradle` looks like this:
 
 	plugins {
-		id 'net.franz-becker.gradle-lombok' version '1.5'
+		id 'io.franzbecker.gradle-lombok' version '1.5'
 		id 'java'
 	}
 	
@@ -78,7 +78,7 @@ This plugin adds a task called `installLombok` to your Gradle build that uses th
 ## Delombok support
 The plugin offers basic support for delomboking. The `DelombokTask` is a simple `JavaExec` task that calls `delombok` on Lombok's main class and simplifies the setup of such a task in the build process:
 
-	import net.franz_becker.gradle.lombok.task.DelombokTask
+	import io.franzbecker.gradle.lombok.task.DelombokTask
 	
 	task delombok(type: DelombokTask) {
 		args("src/main/java", "-d", "src/delombok/java")

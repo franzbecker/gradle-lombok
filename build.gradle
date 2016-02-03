@@ -8,7 +8,7 @@ plugins {
     id 'jacoco'
 }
 
-group 'net.franz-becker'
+group 'io.franzbecker'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
@@ -64,9 +64,14 @@ pluginBundle {
 
     plugins {
         lombokPlugin {
-            id = 'net.franz-becker.gradle-lombok'
+            id = 'io.franzbecker.gradle-lombok'
             displayName = 'Gradle Lombok plugin'
         }
+    }
+
+    mavenCoordinates {
+        groupId = 'io.franzbecker'
+        artifactId = 'gradle-lombok'
     }
 }
 
