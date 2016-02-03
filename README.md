@@ -8,7 +8,7 @@
 A Gradle plugin for project [Lombok](https://projectlombok.org) support.
 
 # Usage
-The plugin is included in the [central plugin repository](https://plugins.gradle.org/plugin/net.franz-becker.gradle-lombok/1.6). 
+The plugin is included in the [central plugin repository](https://plugins.gradle.org/plugin/io.franzbecker.gradle-lombok/1.6). 
 
 A minimal `build.gradle` looks like this:
 
