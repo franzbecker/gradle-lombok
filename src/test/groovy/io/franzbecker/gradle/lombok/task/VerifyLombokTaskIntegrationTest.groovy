@@ -59,4 +59,36 @@ class VerifyLombokTaskIntegrationTest extends AbstractIntegrationTest {
         message.contains("wrongHash")
     }
 
+    def "Task succeeds if hash is null"() {
+        given: "an unset hash"
+        buildFile << """
+            lombok {
+                version = "1.16.4"
+                sha256 = null
+            }
+        """.stripIndent()
+
+        when: "invoking the task"
+        runTasks(VerifyLombokTask.NAME).rethrowFailure()
+
+        then: "task succeeded without exception"
+        noExceptionThrown()
+    }
+
+    def "Task succeeds if hash is empty"() {
+        given: "an unset hash"
+        buildFile << """
+            lombok {
+                version = "1.16.4"
+                sha256 = ""
+            }
+        """.stripIndent()
+
+        when: "invoking the task"
+        runTasks(VerifyLombokTask.NAME).rethrowFailure()
+
+        then: "task succeeded without exception"
+        noExceptionThrown()
+    }
+
 }

@@ -61,9 +61,11 @@ class LombokPlugin implements Plugin<Project> {
      * depend on verifyLombok.
      */
     private void configureTasks(Project project) {
+        def extension = project.extensions.findByType(LombokPluginExtension)
+
         // Add VerifyLombokTask
         def verifyLombok = project.task(type: VerifyLombokTask, VerifyLombokTask.NAME)
-        verifyLombok.outputs.upToDateWhen { false }
+        verifyLombok.outputs.upToDateWhen { !extension.sha256 }
 
         // Add InstallLombokTask
         project.task(type: InstallLombokTask, InstallLombokTask.NAME).with {
