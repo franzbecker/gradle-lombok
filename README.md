@@ -29,6 +29,12 @@ After applying the plugin, the Lombok annotations can be used directly in any Ja
 		sha256 = "3ca225ce3917eac8bf4b7d2186845df4e70dcdede356dca8537b6d78a535c91e"
 	}
 
+If the verifcation of the integrity shall be skipped, the `sha256` value needs to be set to null or an empty string:
+
+	lombok {
+		sha256 = "" // skip verifyLombok task
+	}
+
 Some example Java code to get started can be found in the [wiki](https://github.com/franzbecker/gradle-lombok/wiki/Lombok-getting-started).
 
 
