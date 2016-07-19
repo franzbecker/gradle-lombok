@@ -22,9 +22,13 @@ class VerifyLombokTask extends DefaultTask {
         def extension = project.extensions.findByType(LombokPluginExtension)
         def configuration = project.configurations.getByName(LombokPlugin.LOMBOK_CONFIGURATION_NAME)
 
-        // Lookup JAR and verify it
-        def lombokJar = getLombokJar(extension.version, configuration)
-        verifyIntegrity(extension.sha256, lombokJar)
+        if (extension.sha256) {
+            // Lookup JAR and verify it
+            def lombokJar = getLombokJar(extension.version, configuration)
+            verifyIntegrity(extension.sha256, lombokJar)
+        } else {
+            logger.info("Skipping verification of Lombok since SHA-256 was not configured.")
+        }
     }
 
     /**
