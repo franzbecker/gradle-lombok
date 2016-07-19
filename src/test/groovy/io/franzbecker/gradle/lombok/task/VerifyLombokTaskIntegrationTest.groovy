@@ -91,4 +91,40 @@ class VerifyLombokTaskIntegrationTest extends AbstractIntegrationTest {
         noExceptionThrown()
     }
 
+    def "Task is up-to-date when hash is empty"() {
+        given: "an unset hash"
+        buildFile << """
+            lombok {
+                version = "1.16.4"
+                sha256 = ""
+            }
+        """.stripIndent()
+
+        when: "invoking the task two times"
+        // there is no build history on the first run, so it is never up-to-date
+        runTasks(VerifyLombokTask.NAME).rethrowFailure()
+        def result = runTasks(VerifyLombokTask.NAME).rethrowFailure()
+
+        then: "second run was up-to-date"
+        result.wasUpToDate(VerifyLombokTask.NAME)
+    }
+
+    def "Task is never up-to-date when hash is set"() {
+        given: "a properly configured hash"
+        buildFile << """
+            lombok {
+                version = "1.16.4"
+                sha256 = "3ca225ce3917eac8bf4b7d2186845df4e70dcdede356dca8537b6d78a535c91e"
+            }
+        """.stripIndent()
+
+        when: "invoking the task multiple times"
+        def result1 = runTasksSuccessfully(VerifyLombokTask.NAME)
+        def result2 = runTasksSuccessfully(VerifyLombokTask.NAME)
+
+        then: "both runs were not up-to-date"
+        !result1.wasUpToDate(VerifyLombokTask.NAME)
+        !result2.wasUpToDate(VerifyLombokTask.NAME)
+    }
+
 }
