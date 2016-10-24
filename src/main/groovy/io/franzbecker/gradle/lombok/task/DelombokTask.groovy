@@ -11,6 +11,7 @@ import org.gradle.api.tasks.JavaExec
 class DelombokTask extends JavaExec {
 
     String mainClass = "lombok.delombok.Delombok"
+    String compileConfigurationName = JavaPlugin.COMPILE_CONFIGURATION_NAME
 
     public DelombokTask() {
         super()
@@ -22,7 +23,7 @@ class DelombokTask extends JavaExec {
         // Retrieve extension and configuration
         def extension = project.extensions.findByType(LombokPluginExtension)
         def lombok = project.configurations.getByName(LombokPlugin.LOMBOK_CONFIGURATION_NAME)
-        def compile = project.configurations.getByName(JavaPlugin.COMPILE_CONFIGURATION_NAME)
+        def compile = project.configurations.getByName(compileConfigurationName)
 
         // Configure JavaExec
         setMain(extension.main)
