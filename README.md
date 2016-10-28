@@ -86,8 +86,13 @@ The plugin offers basic support for delomboking. The `DelombokTask` is a simple 
 
 	import io.franzbecker.gradle.lombok.task.DelombokTask
 	
-	task delombok(type: DelombokTask) {
-		args("src/main/java", "-d", "src/delombok/java")
+	task delombok(type: DelombokTask, dependsOn: compileJava) {
+		ext.outputDir = file("$buildDir/delombok")
+		outputs.dir(outputDir)
+		sourceSets.main.java.srcDirs.each { 
+			inputs.dir(it)
+			args(it, "-d", outputDir)
+		}
 	}
 	
 	task delombokHelp(type: DelombokTask) {
@@ -95,3 +100,11 @@ The plugin offers basic support for delomboking. The `DelombokTask` is a simple 
 	}
 	
 The class path for the `DelombokTask` includes, by default, the dependencies of the `compile` and `lombok` configurations only.
+
+Note that if you want to generate JavaDoc you need to configure the `javadoc` task accordingly. For example:
+
+	javadoc {
+	    dependsOn delombok
+	    source = delombok.outputDir
+	    failOnError = false
+	}
