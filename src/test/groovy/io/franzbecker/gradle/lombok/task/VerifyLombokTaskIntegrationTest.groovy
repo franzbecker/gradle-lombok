@@ -25,6 +25,14 @@ class VerifyLombokTaskIntegrationTest extends AbstractIntegrationTest {
         noExceptionThrown()
     }
 
+    def "Task succeeds with the default configuration"() {
+        when: "invoking the task"
+        runTasksSuccessfully(VerifyLombokTask.NAME)
+
+        then: "task succeeded without exception"
+        noExceptionThrown()
+    }
+
     def "Task succeeds with non-default Lombok version"() {
         given: "a properly configured hash"
         buildFile << """
