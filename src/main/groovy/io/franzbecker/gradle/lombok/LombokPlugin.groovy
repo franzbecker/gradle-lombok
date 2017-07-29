@@ -44,11 +44,17 @@ class LombokPlugin implements Plugin<Project> {
      */
     private Configuration createLombokConfiguration(Project project) {
         def configuration = project.configurations.create(LOMBOK_CONFIGURATION_NAME)
-            .setVisible(false)
-            .setDescription("Additional compile classpath for Lombok.")
+                .setVisible(false)
+                .setDescription("Additional compile classpath for Lombok.")
 
         project.afterEvaluate {
-            project.dependencies.add(LOMBOK_CONFIGURATION_NAME, "org.projectlombok:lombok:${project.lombok.version}")
+            project.dependencies.add(
+                    LOMBOK_CONFIGURATION_NAME,
+                    "org.projectlombok:lombok:${project.lombok.version}",
+                    {
+                        transitive = false
+                    }
+            )
         }
 
         def compile = project.configurations.getByName(JavaPlugin.COMPILE_CONFIGURATION_NAME)
