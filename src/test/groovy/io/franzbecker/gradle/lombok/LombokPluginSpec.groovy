@@ -1,9 +1,8 @@
 package io.franzbecker.gradle.lombok
 
-import nebula.test.PluginProjectSpec
 import io.franzbecker.gradle.lombok.task.InstallLombokTask
 import io.franzbecker.gradle.lombok.task.VerifyLombokTask
-
+import nebula.test.PluginProjectSpec
 /**
  * Unit tests for {@link LombokPlugin}.
  */
@@ -12,6 +11,11 @@ class LombokPluginSpec extends PluginProjectSpec {
     @Override
     String getPluginName() {
         return LombokPlugin.NAME
+    }
+
+    private def applyJavaAndLombok() {
+        project.apply plugin: "java"
+        project.apply plugin: pluginName
     }
 
     def "Does not create new tasks if Java plugin is not applied"() {
@@ -36,17 +40,39 @@ class LombokPluginSpec extends PluginProjectSpec {
 
     def "Add Lombok configuration if Java plugin is applied"() {
         when:
-        project.apply plugin: "java"
-        project.apply plugin: pluginName
+        applyJavaAndLombok()
 
         then:
         assert project.configurations.findByName(LombokPlugin.LOMBOK_CONFIGURATION_NAME)
     }
 
+    def "Lombok dependency is added"() {
+        when:
+        applyJavaAndLombok()
+        project.evaluate()
+
+        then:
+        def lombokConfiguration = project.configurations.findByName(LombokPlugin.LOMBOK_CONFIGURATION_NAME)
+        def dependency = lombokConfiguration.getDependencies().first()
+        dependency.group == "org.projectlombok"
+        dependency.name == "lombok"
+    }
+
+    def "Added dependencies are not transitive"() {
+        when:
+        applyJavaAndLombok()
+        project.evaluate()
+
+        then:
+        def lombokConfiguration = project.configurations.findByName(LombokPlugin.LOMBOK_CONFIGURATION_NAME)
+        lombokConfiguration.getDependencies().each {
+            assert !it.isTransitive()
+        }
+    }
+
     def "Add tasks if Java plugin is applied and installLombok depends on verifyLombok"() {
         when:
-        project.apply plugin: "java"
-        project.apply plugin: pluginName
+        applyJavaAndLombok()
 
         then:
         VerifyLombokTask verifyLombok = project.tasks[VerifyLombokTask.NAME]
