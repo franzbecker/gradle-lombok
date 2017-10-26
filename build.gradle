@@ -75,17 +75,19 @@ pluginBundle {
     }
 }
 
-task updateReadmeVersion << {
-    def versionPattern = /\d+.\d+(.\d+)?/
-    def encoding = 'UTF-8'
-    File file = new File("README.md")
+task updateReadmeVersion {
+    doLast {
+        def versionPattern = /\d+.\d+(.\d+)?/
+        def encoding = 'UTF-8'
+        File file = new File("README.md")
 
-    // String replacements - Readme isn't long enough to justify advanced code ;)
-    String text = file.getText(encoding)
-    text = text.replaceAll("gradle-lombok' version '${versionPattern}'", "gradle-lombok' version '${project.version}'")
-    text = text.replaceAll("gradle-lombok/${versionPattern}", "gradle-lombok/${project.version}")
+        // String replacements - Readme isn't long enough to justify advanced code ;)
+        String text = file.getText(encoding)
+        text = text.replaceAll("gradle-lombok' version '${versionPattern}'", "gradle-lombok' version '${project.version}'")
+        text = text.replaceAll("gradle-lombok/${versionPattern}", "gradle-lombok/${project.version}")
 
-    file.setText(text, encoding)
+        file.setText(text, encoding)
+    }
 }
 updateReadmeVersion.shouldRunAfter tasks.getByName('confirmReleaseVersion')
 
