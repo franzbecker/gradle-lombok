@@ -15,32 +15,7 @@ class LombokPluginIntegrationTest extends AbstractIntegrationTest {
             }
         """.stripIndent()
     }
-
-    /**
-     * Creates a Java class annotated with @Data and tests if the
-     * getter and setter are created properly by Lombok.
-     */
-    def "Can compile and test @Data annotation."() {
-        given: "a valid build configuration"
-        buildFile << """
-            dependencies {
-                testCompile 'junit:junit:4.12'
-            }
-        """.stripIndent()
-
-        and: "source code to compile and test"
-        createJavaSource()
-        createTestSource()
-
-        when: "calling gradle test"
-        runBuild('test')
-
-        then: "build is successful and both class file exist"
-        noExceptionThrown()
-        new File(projectDir, "build/classes/java/main/com/example/HelloWorld.class").exists()
-        new File(projectDir, "build/classes/java/test/com/example/HelloWorldTest.class").exists()
-    }
-
+    
     /**
      * Creates a Java class with a method annotated with @SneakyThrows and tests if the
      * annotation is applied properly.
@@ -152,50 +127,6 @@ class LombokPluginIntegrationTest extends AbstractIntegrationTest {
         File[] imlFiles = projectDir.listFiles(filter)
         assert imlFiles.size() == 1
         return imlFiles[0]
-    }
-
-    private void createJavaSource() {
-        def file = createFile("src/main/java/com/example/HelloWorld.java")
-        file << """
-            package com.example;
-
-            import lombok.Data;
-
-            @Data
-            public class HelloWorld {
-
-                private String id;
-
-            }
-        """.stripIndent()
-    }
-
-    private void createTestSource() {
-        def file = createFile("src/test/java/com/example/HelloWorldTest.java")
-        file << """
-            package com.example;
-
-            import java.util.UUID;
-            import org.junit.Test;
-            import org.junit.Assert;
-
-            public class HelloWorldTest {
-
-                @Test
-                public void testHelloWorld() {
-                    // Given
-                    HelloWorld obj = new HelloWorld();
-                    String id = UUID.randomUUID().toString();
-
-                    // When
-                    obj.setId(id);
-
-                    // Then
-                    Assert.assertEquals(id, obj.getId());
-                }
-
-            }
-        """.stripIndent()
     }
 
     private void createSneakyThrowsJavaSource() {
