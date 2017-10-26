@@ -16,11 +16,18 @@ abstract class AbstractIntegrationTest extends Specification {
     TemporaryFolder testProjectDir
     File projectDir
     File buildFile
+    File propertiesFile
 
     def setup() {
         projectDir = testProjectDir.root
-        buildFile = testProjectDir.newFile('build.gradle')
-        buildFile << """
+        buildFile = createFile('build.gradle')
+        writeDefaultBuildFileContents()
+        propertiesFile = createFile('gradle.properties')
+        configureJacoco()
+    }
+
+    protected void writeDefaultBuildFileContents() {
+        buildFile <<  """\
             plugins {
                 id 'java'
                 id '${LombokPlugin.NAME}'
@@ -29,6 +36,11 @@ abstract class AbstractIntegrationTest extends Specification {
                 jcenter()
             }
         """.stripIndent()
+    }
+
+    /** see https://github.com/koral--/jacoco-gradle-testkit-plugin */
+    private void configureJacoco() {
+        propertiesFile << this.class.classLoader.getResourceAsStream('testkit-gradle.properties')
     }
 
     protected GradleRunner createGradleRunner() {

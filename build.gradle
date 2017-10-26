@@ -2,6 +2,7 @@ plugins {
     id 'com.jfrog.bintray' version '1.7.3'
     id 'com.gradle.plugin-publish' version '0.9.7'
     id 'net.researchgate.release' version '2.2.1'
+    id 'pl.droidsonroids.jacoco.testkit' version '1.0.3' // required until https://github.com/gradle/gradle/issues/1465 is resolved
     id 'java-gradle-plugin'
     id 'groovy'
     id 'maven'
