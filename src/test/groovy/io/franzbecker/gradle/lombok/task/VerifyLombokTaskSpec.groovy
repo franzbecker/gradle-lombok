@@ -1,5 +1,7 @@
 package io.franzbecker.gradle.lombok.task
+
 import io.franzbecker.gradle.lombok.LombokPlugin
+import io.franzbecker.gradle.lombok.LombokPluginExtension
 import io.franzbecker.gradle.lombok.util.HashUtilSpec
 import org.gradle.api.GradleException
 import org.gradle.api.Project
@@ -62,6 +64,18 @@ class VerifyLombokTaskSpec extends Specification {
         GradleException e = thrown()
         e.message.contains("Expected checksum: wrongHash")
         e.message.contains("Actual checksum: ${HashUtilSpec.DUMMY_TXT_HASH}")
+    }
+
+    def "Skips the check if no hash has been configured"() {
+        given:
+        def extension = new LombokPluginExtension()
+        extension.sha256 = ''
+
+        when:
+        task.verifyLombok(extension, configuration)
+
+        then:
+        noExceptionThrown()
     }
 
 }

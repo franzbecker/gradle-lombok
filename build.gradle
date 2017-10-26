@@ -2,6 +2,7 @@ plugins {
     id 'com.jfrog.bintray' version '1.7.3'
     id 'com.gradle.plugin-publish' version '0.9.7'
     id 'net.researchgate.release' version '2.2.1'
+    id 'pl.droidsonroids.jacoco.testkit' version '1.0.3' // required until https://github.com/gradle/gradle/issues/1465 is resolved
     id 'java-gradle-plugin'
     id 'groovy'
     id 'maven'
@@ -19,6 +20,7 @@ repositories {
 
 dependencies {
     testCompile 'junit:junit:4.12'
+    testCompile gradleTestKit()
     testCompile 'com.netflix.nebula:nebula-test:4.4.3'
     testCompile 'org.apache.commons:commons-lang3:3.4'
 }
@@ -75,17 +77,19 @@ pluginBundle {
     }
 }
 
-task updateReadmeVersion << {
-    def versionPattern = /\d+.\d+(.\d+)?/
-    def encoding = 'UTF-8'
-    File file = new File("README.md")
+task updateReadmeVersion {
+    doLast {
+        def versionPattern = /\d+.\d+(.\d+)?/
+        def encoding = 'UTF-8'
+        File file = new File("README.md")
 
-    // String replacements - Readme isn't long enough to justify advanced code ;)
-    String text = file.getText(encoding)
-    text = text.replaceAll("gradle-lombok' version '${versionPattern}'", "gradle-lombok' version '${project.version}'")
-    text = text.replaceAll("gradle-lombok/${versionPattern}", "gradle-lombok/${project.version}")
+        // String replacements - Readme isn't long enough to justify advanced code ;)
+        String text = file.getText(encoding)
+        text = text.replaceAll("gradle-lombok' version '${versionPattern}'", "gradle-lombok' version '${project.version}'")
+        text = text.replaceAll("gradle-lombok/${versionPattern}", "gradle-lombok/${project.version}")
 
-    file.setText(text, encoding)
+        file.setText(text, encoding)
+    }
 }
 updateReadmeVersion.shouldRunAfter tasks.getByName('confirmReleaseVersion')
 

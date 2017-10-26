@@ -18,7 +18,7 @@ class DelombokTaskIntegrationTest extends AbstractIntegrationTest {
         """.stripIndent()
 
         when:
-        runTasksSuccessfully("delombokHelp")
+        runBuild("delombokHelp")
 
         then:
         noExceptionThrown()
@@ -52,7 +52,7 @@ class DelombokTaskIntegrationTest extends AbstractIntegrationTest {
         """.stripIndent()
 
         when:
-        runTasksSuccessfully("delombok")
+        runBuild("delombok")
 
         then:
         File file = new File(projectDir, "src/gen/java/com/example/HelloWorld.java")
