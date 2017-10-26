@@ -21,7 +21,10 @@ class VerifyLombokTask extends DefaultTask {
         // Retrieve extension and configuration
         def extension = project.extensions.findByType(LombokPluginExtension)
         def configuration = project.configurations.getByName(LombokPlugin.LOMBOK_CONFIGURATION_NAME)
+        verifyLombok(extension, configuration)
+    }
 
+    protected verifyLombok(LombokPluginExtension extension, Configuration configuration) {
         if (extension.sha256) {
             // Lookup JAR and verify it
             def lombokJar = getLombokJar(extension.version, configuration)
