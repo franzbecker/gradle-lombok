@@ -75,4 +75,61 @@ abstract class AbstractIntegrationTest extends Specification {
         return file
     }
 
+    protected void createSimpleTestCase() {
+        // build configuration supporting JUnit
+        buildFile << """
+            dependencies {
+                testCompile 'junit:junit:4.12'
+            }
+        """.stripIndent()
+
+        // source code to compile and test
+        createJavaSource()
+        createTestSource()
+    }
+
+    private void createJavaSource() {
+        def file = createFile("src/main/java/com/example/HelloWorld.java")
+        file << """\
+            package com.example;
+
+            import lombok.Data;
+
+            @Data
+            public class HelloWorld {
+
+                private String id;
+
+            }
+        """.stripIndent()
+    }
+
+    private void createTestSource() {
+        def file = createFile("src/test/java/com/example/HelloWorldTest.java")
+        file << """\
+            package com.example;
+
+            import java.util.UUID;
+            import org.junit.Test;
+            import org.junit.Assert;
+
+            public class HelloWorldTest {
+
+                @Test
+                public void testHelloWorld() {
+                    // Given
+                    HelloWorld obj = new HelloWorld();
+                    String id = UUID.randomUUID().toString();
+
+                    // When
+                    obj.setId(id);
+
+                    // Then
+                    Assert.assertEquals(id, obj.getId());
+                }
+
+            }
+        """.stripIndent()
+    }
+
 }
