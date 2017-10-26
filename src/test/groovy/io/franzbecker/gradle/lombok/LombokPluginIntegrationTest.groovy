@@ -33,12 +33,12 @@ class LombokPluginIntegrationTest extends AbstractIntegrationTest {
         createTestSource()
 
         when: "calling gradle test"
-        runTasksSuccessfully('test')
+        runBuild('test')
 
         then: "build is successful and both class file exist"
         noExceptionThrown()
-        new File(projectDir, "build/classes/main/com/example/HelloWorld.class").exists()
-        new File(projectDir, "build/classes/test/com/example/HelloWorldTest.class").exists()
+        new File(projectDir, "build/classes/java/main/com/example/HelloWorld.class").exists()
+        new File(projectDir, "build/classes/java/test/com/example/HelloWorldTest.class").exists()
     }
 
     /**
@@ -58,12 +58,12 @@ class LombokPluginIntegrationTest extends AbstractIntegrationTest {
         createSneakyThrowsTestCode()
 
         when: "calling gradle test"
-        runTasksSuccessfully('test')
+        runBuild('test')
 
         then: "build is successful and both class file exist"
         noExceptionThrown()
-        new File(projectDir, "build/classes/main/com/example/SneakyHelloWorld.class").exists()
-        new File(projectDir, "build/classes/test/com/example/SneakyHelloWorldTest.class").exists()
+        new File(projectDir, "build/classes/java/main/com/example/SneakyHelloWorld.class").exists()
+        new File(projectDir, "build/classes/java/test/com/example/SneakyHelloWorldTest.class").exists()
     }
 
     /**
@@ -80,7 +80,7 @@ class LombokPluginIntegrationTest extends AbstractIntegrationTest {
         """.stripIndent()
 
         when: "calling gradle install"
-        runTasksSuccessfully('install')
+        runBuild('install')
 
         then: "Verify that the POM exists"
         def pom = new File(projectDir, "build/poms/pom-default.xml")
@@ -110,7 +110,7 @@ class LombokPluginIntegrationTest extends AbstractIntegrationTest {
         """.stripIndent()
 
         when:
-        runTasksSuccessfully('eclipse')
+        runBuild('eclipse')
 
         then: "verify that the .classpath file exists"
         def dotClasspath = new File(projectDir, ".classpath")
@@ -134,7 +134,7 @@ class LombokPluginIntegrationTest extends AbstractIntegrationTest {
         """.stripIndent()
 
         when:
-        runTasksSuccessfully('idea')
+        runBuild('idea')
 
         then: "verify that the .iml file exists"
         File imlFile = getImlFile()

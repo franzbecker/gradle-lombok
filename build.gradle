@@ -19,6 +19,7 @@ repositories {
 
 dependencies {
     testCompile 'junit:junit:4.12'
+    testCompile gradleTestKit()
     testCompile 'com.netflix.nebula:nebula-test:4.4.3'
     testCompile 'org.apache.commons:commons-lang3:3.4'
 }

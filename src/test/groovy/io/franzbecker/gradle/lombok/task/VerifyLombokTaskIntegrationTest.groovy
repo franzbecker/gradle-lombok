@@ -1,8 +1,7 @@
 package io.franzbecker.gradle.lombok.task
-import io.franzbecker.gradle.lombok.AbstractIntegrationTest
-import org.gradle.api.GradleException
 
-import static org.apache.commons.lang3.exception.ExceptionUtils.getRootCauseMessage
+import io.franzbecker.gradle.lombok.AbstractIntegrationTest
+import org.gradle.testkit.runner.TaskOutcome
 
 /**
  * Integration tests for {@link VerifyLombokTask}.
@@ -19,7 +18,7 @@ class VerifyLombokTaskIntegrationTest extends AbstractIntegrationTest {
         """.stripIndent()
 
         when: "invoking the task"
-        runTasksSuccessfully(VerifyLombokTask.NAME)
+        runBuild(VerifyLombokTask.NAME)
 
         then: "task succeeded without exception"
         noExceptionThrown()
@@ -27,7 +26,7 @@ class VerifyLombokTaskIntegrationTest extends AbstractIntegrationTest {
 
     def "Task succeeds with the default configuration"() {
         when: "invoking the task"
-        runTasksSuccessfully(VerifyLombokTask.NAME)
+        runBuild(VerifyLombokTask.NAME)
 
         then: "task succeeded without exception"
         noExceptionThrown()
@@ -43,7 +42,7 @@ class VerifyLombokTaskIntegrationTest extends AbstractIntegrationTest {
         """.stripIndent()
 
         when: "invoking the task"
-        runTasksSuccessfully(VerifyLombokTask.NAME)
+        runBuild(VerifyLombokTask.NAME)
 
         then: "task succeeded without exception"
         noExceptionThrown()
@@ -59,12 +58,10 @@ class VerifyLombokTaskIntegrationTest extends AbstractIntegrationTest {
         """.stripIndent()
 
         when: "invoking the task"
-        runTasks(VerifyLombokTask.NAME).rethrowFailure()
+        def result = runTaskAndFail(VerifyLombokTask.NAME)
 
         then: "expect a failure"
-        GradleException e = thrown()
-        def message = getRootCauseMessage(e)
-        message.contains("wrongHash")
+        result.output.contains("Expected checksum: wrongHash")
     }
 
     def "Task succeeds if hash is null"() {
@@ -77,7 +74,7 @@ class VerifyLombokTaskIntegrationTest extends AbstractIntegrationTest {
         """.stripIndent()
 
         when: "invoking the task"
-        runTasks(VerifyLombokTask.NAME).rethrowFailure()
+        runBuild(VerifyLombokTask.NAME)
 
         then: "task succeeded without exception"
         noExceptionThrown()
@@ -93,7 +90,7 @@ class VerifyLombokTaskIntegrationTest extends AbstractIntegrationTest {
         """.stripIndent()
 
         when: "invoking the task"
-        runTasks(VerifyLombokTask.NAME).rethrowFailure()
+        runBuild(VerifyLombokTask.NAME)
 
         then: "task succeeded without exception"
         noExceptionThrown()
@@ -110,11 +107,11 @@ class VerifyLombokTaskIntegrationTest extends AbstractIntegrationTest {
 
         when: "invoking the task two times"
         // there is no build history on the first run, so it is never up-to-date
-        runTasks(VerifyLombokTask.NAME).rethrowFailure()
-        def result = runTasks(VerifyLombokTask.NAME).rethrowFailure()
+        runBuild(VerifyLombokTask.NAME)
+        def result = runBuild(VerifyLombokTask.NAME)
 
         then: "second run was up-to-date"
-        result.wasUpToDate(VerifyLombokTask.NAME)
+        result.tasks(TaskOutcome.UP_TO_DATE).first().path == ":$VerifyLombokTask.NAME"
     }
 
     def "Task is never up-to-date when hash is set"() {
@@ -127,12 +124,12 @@ class VerifyLombokTaskIntegrationTest extends AbstractIntegrationTest {
         """.stripIndent()
 
         when: "invoking the task multiple times"
-        def result1 = runTasksSuccessfully(VerifyLombokTask.NAME)
-        def result2 = runTasksSuccessfully(VerifyLombokTask.NAME)
+        def result1 = runBuild(VerifyLombokTask.NAME)
+        def result2 = runBuild(VerifyLombokTask.NAME)
 
         then: "both runs were not up-to-date"
-        !result1.wasUpToDate(VerifyLombokTask.NAME)
-        !result2.wasUpToDate(VerifyLombokTask.NAME)
+        result1.tasks(TaskOutcome.UP_TO_DATE).empty
+        result2.tasks(TaskOutcome.UP_TO_DATE).empty
     }
 
 }
