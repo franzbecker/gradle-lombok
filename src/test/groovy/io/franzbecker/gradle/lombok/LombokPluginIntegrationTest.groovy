@@ -41,6 +41,20 @@ class LombokPluginIntegrationTest extends AbstractIntegrationTest {
         new File(projectDir, "build/classes/java/test/com/example/SneakyHelloWorldTest.class").exists()
     }
 
+    def "Works with the java-library plugin"() {
+        given:
+        buildFile.text = buildFile.text.replace("id 'java'", "id 'java-library'")
+        createSimpleTestCase()
+
+        when:
+        runBuild('test')
+
+        then:
+        noExceptionThrown()
+        new File(projectDir, "build/classes/java/main/com/example/HelloWorld.class").exists()
+        new File(projectDir, "build/classes/java/test/com/example/HelloWorldTest.class").exists()
+    }
+
     /**
      * Verifies that the Lombok dependency does not occur in the generated POM.
      */

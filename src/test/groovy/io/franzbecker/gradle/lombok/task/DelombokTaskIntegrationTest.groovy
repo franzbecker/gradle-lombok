@@ -26,7 +26,7 @@ class DelombokTaskIntegrationTest extends AbstractIntegrationTest {
 
     def "Delombok on directory produced proper output"() {
         given:
-        createJavaSource()
+        createSourceForDelombok()
 
         and:
         buildFile << """
@@ -63,7 +63,7 @@ class DelombokTaskIntegrationTest extends AbstractIntegrationTest {
         contents.contains("public String getId() {")
     }
 
-    private void createJavaSource() {
+    private void createSourceForDelombok() {
         def file = createFile("src/main/java/com/example/HelloWorld.java")
         file << """
             package com.example;
