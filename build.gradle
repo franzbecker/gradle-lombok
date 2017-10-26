@@ -1,7 +1,7 @@
 plugins {
     id 'com.jfrog.bintray' version '1.7.3'
-    id 'com.gradle.plugin-publish' version '0.9.7'
-    id 'net.researchgate.release' version '2.2.1'
+    id 'com.gradle.plugin-publish' version '0.9.9'
+    id 'net.researchgate.release' version '2.6.0'
     id 'pl.droidsonroids.jacoco.testkit' version '1.0.3' // required until https://github.com/gradle/gradle/issues/1465 is resolved
     id 'java-gradle-plugin'
     id 'groovy'
@@ -21,8 +21,7 @@ repositories {
 dependencies {
     testCompile 'junit:junit:4.12'
     testCompile gradleTestKit()
-    testCompile 'com.netflix.nebula:nebula-test:4.4.3'
-    testCompile 'org.apache.commons:commons-lang3:3.4'
+    testCompile 'com.netflix.nebula:nebula-test:6.1.2'
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
