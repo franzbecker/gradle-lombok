@@ -27,7 +27,7 @@ class DelombokTask extends JavaExec {
 
         // Configure JavaExec
         setMain(extension.main)
-        setClasspath(lombok + compile)
+        classpath(lombok, compile)
         super.exec()
     }
 
