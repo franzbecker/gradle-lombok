@@ -29,11 +29,11 @@ class CompatibilityIntegrationTest extends AbstractIntegrationTest {
 
         where:
         gradleVersion || classesPath
-        '2.11'        || 'build/classes'
         '2.12'        || 'build/classes'
         '2.14.1'      || 'build/classes'
         '3.5'         || 'build/classes'
         '4.2.1'       || 'build/classes/java'
+        '4.6'         || 'build/classes/java'
     }
 
 }
