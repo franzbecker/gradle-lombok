@@ -58,12 +58,12 @@ class LombokPlugin implements Plugin<Project> {
             )
         }
 
-        project.configurations.getByName(JavaPlugin.COMPILE_ONLY_CONFIGURATION_NAME).extendsFrom(configuration)
-        project.configurations.getByName(JavaPlugin.TEST_COMPILE_ONLY_CONFIGURATION_NAME).extendsFrom(configuration)
         boolean atLeastGradle4_6 = GradleVersion.version(project.gradle.gradleVersion) >= GradleVersion.version('4.6')
         if (atLeastGradle4_6) {
+            project.configurations.getByName(JavaPlugin.IMPLEMENTATION_CONFIGURATION_NAME).extendsFrom(configuration)
             project.configurations.getByName(JavaPlugin.ANNOTATION_PROCESSOR_CONFIGURATION_NAME).extendsFrom(configuration)
-            project.configurations.getByName(JavaPlugin.TEST_ANNOTATION_PROCESSOR_CONFIGURATION_NAME).extendsFrom(configuration)
+        } else {
+            project.configurations.getByName("compile" /* JavaPlugin.COMPILE_CONFIGURATION_NAME */).extendsFrom(configuration)
         }
 
         return configuration

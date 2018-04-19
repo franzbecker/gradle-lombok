@@ -130,7 +130,7 @@ class LombokPluginIntegrationTest extends AbstractIntegrationTest {
 
         and: "verify the lombok JAR is included"
         def module = new XmlSlurper().parse(imlFile)
-        def provided = module.component.orderEntry.find { it.@scope == "PROVIDED" }
+        def provided = module.component.orderEntry.find { it.@type == "module-library" }
         assert provided
         def lombokEntry = provided.library.CLASSES.root.find { it.@url.text().contains("lombok-${LOMBOK_VERSION}.jar") }
         assert lombokEntry
