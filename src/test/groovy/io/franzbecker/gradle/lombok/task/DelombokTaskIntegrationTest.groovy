@@ -69,6 +69,7 @@ class DelombokTaskIntegrationTest extends AbstractIntegrationTest {
         and:
         buildFile << """
             dependencies {
+// TODO this doesn't make sense any more
                 compileOnly "com.google.guava:guava:20.0" // 20.0 for Java 7 support
             }
 
