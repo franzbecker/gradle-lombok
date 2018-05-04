@@ -22,8 +22,6 @@ A minimal `build.gradle` looks like this:
         jcenter() // or Maven central, required for Lombok dependency
     }
 
-__*HINT:* There is currently an issue with IntelliJ when using the newest version of this plugin (1.12), so if you're on IntelliJ please use the version 1.11.__
-
 After applying the plugin, the Lombok annotations can be used directly in any Java code and the Lombok Eclipse installer can be called via `gradlew installLombok`. The Lombok version can be configured using the following syntax:
 
     lombok { // optional: values below are the defaults
