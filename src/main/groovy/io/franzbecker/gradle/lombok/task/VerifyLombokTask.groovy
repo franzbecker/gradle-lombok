@@ -43,7 +43,7 @@ class VerifyLombokTask extends DefaultTask {
         // Retrieve file
         def lombokFileName = "lombok-${lombokVersion}.jar"
         logger.debug("Searching for '${lombokFileName}' in dependencies of configuration '${LombokPlugin.LOMBOK_CONFIGURATION_NAME}'.")
-        def lombokJar = configuration.find { File file -> file.name == lombokFileName }
+        def lombokJar = configuration.files.find { File file -> file.name == lombokFileName }
         if (!lombokJar) {
             throw new ResourceException("Could not find '${lombokFileName}' in dependencies of configuration '${LombokPlugin.LOMBOK_CONFIGURATION_NAME}'.")
         }
