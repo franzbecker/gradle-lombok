@@ -33,7 +33,7 @@ class CompatibilityIntegrationTest extends AbstractIntegrationTest {
         '2.14.1'      || 'build/classes'
         '3.5'         || 'build/classes'
         '4.2.1'       || 'build/classes/java'
-        '4.6'         || 'build/classes/java'
+        '4.7'         || 'build/classes/java'
     }
 
 }
