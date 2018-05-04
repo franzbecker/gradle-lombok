@@ -7,6 +7,7 @@ plugins {
     id 'groovy'
     id 'maven'
     id 'jacoco'
+    id 'maven-publish'
 }
 
 group 'io.franzbecker'
@@ -104,3 +105,11 @@ release {
     tagTemplate = 'v${version}'
 }
 tasks.getByName('preTagCommit').dependsOn updateReadmeVersion
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}

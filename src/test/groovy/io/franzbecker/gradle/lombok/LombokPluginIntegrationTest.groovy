@@ -1,11 +1,13 @@
 package io.franzbecker.gradle.lombok
 
+import groovy.util.slurpersupport.GPathResult
+
 /**
  * Integration tests for {@link LombokPlugin}.
  */
 class LombokPluginIntegrationTest extends AbstractIntegrationTest {
 
-    private static final LOMBOK_VERSION = "1.16.4"
+    private static final LOMBOK_VERSION = "1.16.20"
 
     def setup() {
         buildFile << """
@@ -41,6 +43,25 @@ class LombokPluginIntegrationTest extends AbstractIntegrationTest {
         new File(projectDir, "build/classes/java/test/com/example/SneakyHelloWorldTest.class").exists()
     }
 
+    def "Can compile test code with Lombok depenceny"() {
+        given:
+        buildFile << """
+            dependencies {
+                testCompile 'junit:junit:4.12'
+            }
+        """.stripIndent()
+
+        and:
+        createTestCodeWithLombokDependency()
+
+        when:
+        runBuild('test')
+
+        then:
+        noExceptionThrown()
+        new File(projectDir, "build/classes/java/test/com/example/SneakyHelloWorldTest.class").exists()
+    }
+
     def "Works with the java-library plugin"() {
         given:
         buildFile.text = buildFile.text.replace("id 'java'", "id 'java-library'")
@@ -55,10 +76,7 @@ class LombokPluginIntegrationTest extends AbstractIntegrationTest {
         new File(projectDir, "build/classes/java/test/com/example/HelloWorldTest.class").exists()
     }
 
-    /**
-     * Verifies that the Lombok dependency does not occur in the generated POM.
-     */
-    def "Dependency does not occur in generated POM"() {
+    def "Dependency does not occur in generated POM using the 'maven' plugin"() {
         given: "a valid build configuration"
         buildFile << """
             apply plugin: 'maven'
@@ -71,22 +89,53 @@ class LombokPluginIntegrationTest extends AbstractIntegrationTest {
         when: "calling gradle install"
         runBuild('install')
 
-        then: "Verify that the POM exists"
-        def pom = new File(projectDir, "build/poms/pom-default.xml")
-        assert pom.exists()
-
-        and: "Parse POM and retrieve <dependencies> object"
-        def pomXml = new XmlSlurper().parseText(pom.text)
-        def dependencies = pomXml.dependencies
+        then: "Parse POM and retrieve <dependencies> object"
+        def parsedXml = findAndParsePom("build/poms/pom-default.xml")
+        def dependencies = parsedXml.dependencies
         assert dependencies.size() == 1
+        assert dependencies.dependency.find { it.artifactId.text() == 'junit' }
+        assert !dependencies.dependency.find { it.artifactId.text() == 'lombok' }
+    }
 
-        and: "Verify that JUnit dependency exists"
-        def junit = dependencies.dependency.find { it.artifactId.text() == 'junit' }
-        assert junit
+    def "Dependency does not occur in generated POM using the 'maven-publish' plugin"() {
+        given:
+        buildFile << '''
+            apply plugin: 'maven-publish'
+            
+            dependencies {
+                compile 'javax.inject:javax.inject:1'
+            }
+            
+            publishing {
+                publications {
+                    mavenJava(MavenPublication) {
+                        from components.java
+                    }
+                }   
+            }
+            
+            model {
+                tasks.generatePomFileForMavenJavaPublication {
+                    destination = file("$buildDir/generated-pom.xml")
+                }
+            }
+        '''.stripIndent()
 
-        and: "Verify that Lombok dependency does not exist"
-        def lombok = dependencies.dependency.find { it.artifactId.text() == 'lombok' }
-        assert !lombok
+        when:
+        runBuild('generatePomFileForMavenJavaPublication')
+
+        then:
+        def parsedXml = findAndParsePom("build/generated-pom.xml")
+        def dependencies = parsedXml.dependencies
+        assert dependencies.size() == 1
+        assert dependencies.dependency.find { it.artifactId.text() == 'javax.inject' }
+        assert !dependencies.dependency.find { it.artifactId.text() == 'lombok' }
+    }
+
+    private GPathResult findAndParsePom(String path) {
+        def pom = new File(projectDir, path)
+        assert pom.exists()
+        return new XmlSlurper().parseText(pom.text)
     }
 
     /**
@@ -182,6 +231,28 @@ class LombokPluginIntegrationTest extends AbstractIntegrationTest {
             }
 
         """.stripIndent()
+    }
+
+    private void createTestCodeWithLombokDependency() {
+        def file = createFile("src/test/java/com/example/SneakyHelloWorldTest.java")
+        file << '''
+            package com.example;
+
+            import org.junit.Assert;
+            import org.junit.Test;
+            import lombok.SneakyThrows;
+            import java.io.UnsupportedEncodingException;
+
+            public class SneakyHelloWorldTest {
+
+                @Test(expected = UnsupportedEncodingException.class)
+                @SneakyThrows
+                public void testThrowingStuff() {
+                    "test".getBytes("unsupported");
+                }
+
+            }
+        '''.stripIndent()
     }
 
 }

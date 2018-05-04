@@ -48,8 +48,7 @@ When using Lombok in your Gradle project, you should consider using this plugin 
 
 ## Adding the Lombok dependency
 
-This plugin adds a configuration called `lombok`, adds the Lombok dependency to it and lets
-`compileOnly` and `testCompileOnly` extend from it. Starting with Gradle 4.6 also `annotationProcessor` and `testAnnotationProcessor`.
+This plugin adds the Lombok dependency to `compileOnly` and `testCompileOnly`. Starting with Gradle 4.6 also `annotationProcessor` and `testAnnotationProcessor`.
 Note that for using Gradle prior to version 2.12 please use this plugin in version "1.11" which is the last version that supports Gradle < 2.12.
 
 ## Simplifying Eclipse IDE installation
