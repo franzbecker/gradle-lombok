@@ -7,6 +7,9 @@ class LombokPluginExtension {
 
     static final String NAME = "lombok"
 
+    /** Lombok dependency coordinates to add to the project. */
+    String coordinates = "org.projectlombok:lombok"
+
     /** The version of Lombok to use. */
     String version = "1.16.20"
 

@@ -27,6 +27,7 @@ After applying the plugin, the Lombok annotations can be used directly in any Ja
     lombok { // optional: values below are the defaults
         version = "1.16.20"
         sha256 = "c5178b18caaa1a15e17b99ba5e4023d2de2ebc18b58cde0f5a04ca4b31c10e6d"
+        coordinates = "org.projectlombok:lombok"
     }
 
 If the verifcation of the integrity shall be skipped, the `sha256` value needs to be set to null or an empty string:
@@ -55,7 +56,7 @@ Note that for using Gradle prior to version 2.12 please use this plugin in versi
 
 The project Lombok website states:
 > NOTE: You'll still need to download lombok, or doubleclick on the lombok.jar file downloaded by maven / ivy / gradle, to install lombok into your eclipse installation.
- 
+
 When using Lombok in teams with no automated Eclipse provisioning this is quite a pain. Every developer has to retrieve the JAR in the right version, verify its integrity (some won't) and call `java -jar lombok.jar`.
 
 This plugin adds a task called `installLombok` to your Gradle build that uses the dependency that has already been added to the compile-only scope, verifies its integrity using SHA-256 and finally invokes the main class of the JAR. This greatly simplifies the installation process for each developer and makes sure that the same version is used across the team.
