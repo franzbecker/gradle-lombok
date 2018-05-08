@@ -9,7 +9,7 @@ class LombokPluginExtensionTest extends AbstractIntegrationTest {
     private static final LOMBOK_VERSION = "1.16.20"
     
     /**
-     * Creates a Java class with a method annotated with @SneakyThrows and tests if the
+     * Creates a build file with bad lombok coordinates and then check to see if
      * the lombok dependency can be applied successfully, which should fail given
      * the coordinates are incorrect.
      */
