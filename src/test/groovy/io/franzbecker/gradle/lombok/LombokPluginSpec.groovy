@@ -4,7 +4,7 @@ import io.franzbecker.gradle.lombok.task.InstallLombokTask
 import io.franzbecker.gradle.lombok.task.VerifyLombokTask
 import nebula.test.PluginProjectSpec
 /**
- * Unit tests for {@link LombokPlugin}.
+ * Unit tests for {@link LombokPluginSpec}.
  */
 class LombokPluginSpec extends PluginProjectSpec {
 

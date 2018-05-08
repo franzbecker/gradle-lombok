@@ -3,7 +3,7 @@ package io.franzbecker.gradle.lombok
 import groovy.util.slurpersupport.GPathResult
 
 /**
- * Integration tests for {@link LombokPlugin}.
+ * Integration tests for {@link LombokPluginIntegrationTest}.
  */
 class LombokPluginIntegrationTest extends AbstractIntegrationTest {
 
@@ -43,7 +43,7 @@ class LombokPluginIntegrationTest extends AbstractIntegrationTest {
         new File(projectDir, "build/classes/java/test/com/example/SneakyHelloWorldTest.class").exists()
     }
 
-    def "Can compile test code with Lombok depenceny"() {
+    def "Can compile test code with Lombok dependency"() {
         given:
         buildFile << """
             dependencies {
