@@ -3,7 +3,7 @@ package io.franzbecker.gradle.lombok
 import org.gradle.testkit.runner.InvalidPluginMetadataException
 
 /**
- * Integration tests for {@link LombokPluginExtensionTest}.
+ * Integration tests for {@link LombokPlugin}.
  */
 class LombokPluginExtensionTest extends AbstractIntegrationTest {
     private static final LOMBOK_VERSION = "1.16.20"
