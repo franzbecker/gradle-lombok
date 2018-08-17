@@ -72,6 +72,9 @@ The plugin offers basic support for delomboking. The `DelombokTask` is a simple 
             inputs.dir(it)
             args(it, "-d", outputDir)
         }
+        doFirst {
+            outputDir.deleteDir()
+        }
     }
     
     task delombokHelp(type: DelombokTask) {
