@@ -52,7 +52,7 @@ class LombokPlugin implements Plugin<Project> {
     private void addLombokDependency(Project project, String configurationName) {
         project.dependencies.add(
                 configurationName,
-                "org.projectlombok:lombok:${project.lombok.version}",
+                "${project.lombok.coordinates}:${project.lombok.version}",
                 { transitive = false }
         )
     }

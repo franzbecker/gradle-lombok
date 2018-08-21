@@ -58,6 +58,19 @@ class LombokPluginSpec extends PluginProjectSpec {
         dependency.name == "lombok"
     }
 
+    def "Custom Lombok dependency is added"() {
+        when:
+        applyJavaAndLombok()
+        project.lombok.coordinates = "net.projectlombok:lombok-custom"
+        project.evaluate()
+
+        then:
+        def lombokConfiguration = project.configurations.findByName(LombokPlugin.LOMBOK_CONFIGURATION_NAME)
+        def dependency = lombokConfiguration.getDependencies().first()
+        dependency.group == "net.projectlombok"
+        dependency.name == "lombok-custom"
+    }
+
     def "Added dependencies are not transitive"() {
         when:
         applyJavaAndLombok()
