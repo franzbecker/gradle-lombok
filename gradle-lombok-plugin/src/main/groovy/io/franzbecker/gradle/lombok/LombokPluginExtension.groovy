@@ -6,12 +6,14 @@ package io.franzbecker.gradle.lombok
 class LombokPluginExtension {
 
     static final String NAME = "lombok"
+    static final String DEFAULT_VERSION = "1.18.4"
+    static final String DEFAULT_VERSION_HASH = "39f3922deb679b1852af519eb227157ef2dd0a21eec3542c8ce1b45f2df39742"
 
     /** The version of Lombok to use. */
-    String version = "1.16.20"
+    String version = DEFAULT_VERSION
 
     /** The SHA-256 hash of the JAR. */
-    String sha256 = "c5178b18caaa1a15e17b99ba5e4023d2de2ebc18b58cde0f5a04ca4b31c10e6d"
+    String sha256 = DEFAULT_VERSION_HASH
 
     /** The main class to call when invoking {@linkplain InstallLombokTask#NAME}. */
     String main = "lombok.launch.Main"

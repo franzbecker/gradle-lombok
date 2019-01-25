@@ -7,17 +7,6 @@ import groovy.util.slurpersupport.GPathResult
  */
 class LombokPluginIntegrationTest extends AbstractIntegrationTest {
 
-    private static final LOMBOK_VERSION = "1.16.20"
-
-    def setup() {
-        buildFile << """
-            lombok {
-                version = "${LOMBOK_VERSION}"
-                sha256 = "3ca225ce3917eac8bf4b7d2186845df4e70dcdede356dca8537b6d78a535c91e"
-            }
-        """.stripIndent()
-    }
-    
     /**
      * Creates a Java class with a method annotated with @SneakyThrows and tests if the
      * annotation is applied properly.
@@ -157,7 +146,7 @@ class LombokPluginIntegrationTest extends AbstractIntegrationTest {
         and: "verify the lombok JAR is included"
         def classpath = new XmlSlurper().parse(dotClasspath)
         def lombokEntry = classpath.classpathentry.find { node ->
-            node.@kind == "lib" && node.@path.text().contains("lombok-${LOMBOK_VERSION}.jar")
+            node.@kind == "lib" && node.@path.text().contains("lombok-${LombokPluginExtension.DEFAULT_VERSION}.jar")
         }
         assert lombokEntry
     }
@@ -181,7 +170,9 @@ class LombokPluginIntegrationTest extends AbstractIntegrationTest {
         def module = new XmlSlurper().parse(imlFile)
         def provided = module.component.orderEntry.find { it.@type == "module-library" }
         assert provided
-        def lombokEntry = provided.library.CLASSES.root.find { it.@url.text().contains("lombok-${LOMBOK_VERSION}.jar") }
+        def lombokEntry = provided.library.CLASSES.root.find {
+            it.@url.text().contains("lombok-${LombokPluginExtension.DEFAULT_VERSION}.jar")
+        }
         assert lombokEntry
     }
 
