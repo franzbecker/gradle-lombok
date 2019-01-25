@@ -12,8 +12,8 @@ plugins {
 
 group 'io.franzbecker'
 
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 repositories {
     jcenter()
@@ -35,7 +35,7 @@ artifacts {
 }
 
 jacoco {
-    toolVersion = "0.8.1"
+    toolVersion = "0.8.3"
 }
 
 jacocoTestReport {
@@ -62,16 +62,25 @@ bintray {
     }
 }
 
+gradlePlugin {
+    plugins {
+        lombokPlugin {
+            id = 'io.franzbecker.gradle-lombok'
+            displayName = 'Gradle Lombok plugin'
+            description = 'A gradle plugin that simplifies the usage of the Lombok annotation processor.'
+            implementationClass = 'io.franzbecker.gradle.lombok.LombokPlugin'
+        }
+    }
+}
+
 pluginBundle {
     website = 'https://github.com/franzbecker/gradle-lombok'
     vcsUrl = 'https://github.com/franzbecker/gradle-lombok.git'
-    description = 'A gradle plugin that simplifies the usage of the Lombok annotation processor.'
     tags = ['gradle', 'lombok']
 
     plugins {
         lombokPlugin {
             id = 'io.franzbecker.gradle-lombok'
-            displayName = 'Gradle Lombok plugin'
         }
     }
 

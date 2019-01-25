@@ -1,8 +1,8 @@
 language: groovy
 sudo: false
-dist: precise
+dist: trusty
 jdk:
-  - oraclejdk7
+  - openjdk8
 cache:
   directories:
   - $HOME/.gradle
