@@ -94,7 +94,7 @@ task updateReadmeVersion {
     doLast {
         def versionPattern = /\d+.\d+(.\d+)?/
         def encoding = 'UTF-8'
-        File file = new File("README.md")
+        File file = new File("../README.md")
 
         // String replacements - Readme isn't long enough to justify advanced code ;)
         String text = file.getText(encoding)
