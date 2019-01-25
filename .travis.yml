@@ -1,11 +1,13 @@
 language: groovy
 sudo: false
-dist: precise
+dist: trusty
 jdk:
-  - oraclejdk7
+  - openjdk8
 cache:
   directories:
   - $HOME/.gradle
+before_install:
+  - cd gradle-lombok-plugin
 after_success:
   - bash <(curl -s https://codecov.io/bash)
   - ./.travis-publishOnRelease.sh
