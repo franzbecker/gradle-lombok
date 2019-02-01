@@ -1,8 +1,0 @@
-plugins {
-    id 'java'
-    id 'io.franzbecker.gradle-lombok' // you will need to put a version here
-}
-
-repositories {
-    jcenter()
-}

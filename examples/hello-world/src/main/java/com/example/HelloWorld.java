@@ -9,5 +9,4 @@ public class HelloWorld {
         greeting.setMessage("Hello world!");
         System.out.println(greeting.getMessage());
     }
-
 }

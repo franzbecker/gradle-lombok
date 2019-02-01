@@ -1,13 +1,22 @@
 language: groovy
 sudo: false
 dist: trusty
-jdk:
-  - openjdk8
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 cache:
   directories:
-  - $HOME/.gradle
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+env:
+  - PLUGIN_BUILD_DIR=$TRAVIS_BUILD_DIR/gradle-lombok-plugin
 before_install:
-  - cd gradle-lombok-plugin
+  - jdk_switcher use openjdk8
+  - cd $PLUGIN_BUILD_DIR
+script:
+  - ./gradlew check
+  - $TRAVIS_BUILD_DIR/examples/.travis-run-examples.sh
+  - jdk_switcher use openjdk8
 after_success:
   - bash <(curl -s https://codecov.io/bash)
   - ./.travis-publishOnRelease.sh
