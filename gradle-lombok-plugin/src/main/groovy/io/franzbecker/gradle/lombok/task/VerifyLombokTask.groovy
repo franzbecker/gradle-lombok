@@ -1,10 +1,12 @@
 package io.franzbecker.gradle.lombok.task
+
 import io.franzbecker.gradle.lombok.LombokPlugin
 import io.franzbecker.gradle.lombok.LombokPluginExtension
 import io.franzbecker.gradle.lombok.util.HashUtil
 import org.gradle.api.DefaultTask
 import org.gradle.api.artifacts.Configuration
 import org.gradle.api.resources.ResourceException
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 
 /**
@@ -14,6 +16,7 @@ class VerifyLombokTask extends DefaultTask {
 
     static final String NAME = "verifyLombok"
 
+    @Internal
     HashUtil hashUtil = new HashUtil()
 
     @TaskAction

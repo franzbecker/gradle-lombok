@@ -1,7 +1,9 @@
 package io.franzbecker.gradle.lombok.task
+
 import io.franzbecker.gradle.lombok.LombokPlugin
 import io.franzbecker.gradle.lombok.LombokPluginExtension
 import org.gradle.api.plugins.JavaPlugin
+import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.JavaExec
 
 /**
@@ -10,10 +12,10 @@ import org.gradle.api.tasks.JavaExec
  */
 class DelombokTask extends JavaExec {
 
-    String mainClass = "lombok.delombok.Delombok"
+    @Input
     String compileConfigurationName = JavaPlugin.COMPILE_CONFIGURATION_NAME
 
-    public DelombokTask() {
+    DelombokTask() {
         super()
         args "delombok"
     }
