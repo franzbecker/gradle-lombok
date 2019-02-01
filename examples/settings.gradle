@@ -1,0 +1,7 @@
+// this defines a composite build - you won't need this in your project
+includeBuild '../gradle-lombok-plugin'
+
+rootProject.name = 'examples'
+
+include 'hello-world'
+include 'delombok-gradle-groovy'
