@@ -5,3 +5,4 @@ rootProject.name = 'examples'
 
 include 'hello-world'
 include 'delombok-gradle-groovy'
+include 'delombok-gradle-kotlin'
