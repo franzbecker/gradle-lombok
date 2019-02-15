@@ -61,32 +61,10 @@ When using Lombok in teams with no automated Eclipse provisioning this is quite 
 This plugin adds a task called `installLombok` to your Gradle build that uses the dependency that has already been added to the compile-only scope, verifies its integrity using SHA-256 and finally invokes the main class of the JAR. This greatly simplifies the installation process for each developer and makes sure that the same version is used across the team.
 
 ## Delombok support
-The plugin offers basic support for delomboking. The `DelombokTask` is a simple `JavaExec` task that calls `delombok` on Lombok's main class and simplifies the setup of such a task in the build process:
 
-    import io.franzbecker.gradle.lombok.task.DelombokTask
-    
-    task delombok(type: DelombokTask, dependsOn: compileJava) {
-        ext.outputDir = file("$buildDir/delombok")
-        outputs.dir(outputDir)
-        sourceSets.main.java.srcDirs.each { 
-            inputs.dir(it)
-            args(it, "-d", outputDir)
-        }
-        doFirst {
-            outputDir.deleteDir()
-        }
-    }
-    
-    task delombokHelp(type: DelombokTask) {
-        args "--help"
-    }
-    
-The class path for the `DelombokTask` includes, by default, the dependencies of the `compile` and `lombok` configurations only.
+The plugin offers basic support for delomboking. The `DelombokTask` is a simple `JavaExec` task that calls `delombok` on Lombok's main class and simplifies the setup of such a task in the build process. It is not a ready to use task.
 
-Note that if you want to generate JavaDoc you need to configure the `javadoc` task accordingly. For example:
+Examples can be found at:
 
-    javadoc {
-        dependsOn delombok
-        source = delombok.outputDir
-        failOnError = false
-    }
+[examples/delombok-gradle-groovy/build.gradle](examples/delombok-gradle-groovy/build.gradle) and<br/>
+[examples/delombok-gradle-kotlin/build.gradle.kts](examples/delombok-gradle-kotlin/build.gradle.kts)
