@@ -2,12 +2,11 @@ import io.franzbecker.gradle.lombok.task.DelombokTask
 
 tasks {
 
-    val delombok by registering(DelombokTask::class)
-    delombok {
+    val delombok by registering(DelombokTask::class) {
         dependsOn(compileJava)
         val outputDir by extra { file("$buildDir/delombok") }
         outputs.dir(outputDir)
-        sourceSets.getByName("main").java.srcDirs.forEach {
+        sourceSets["main"].java.srcDirs.forEach {
             inputs.dir(it)
             args(it, "-d", outputDir)
         }
