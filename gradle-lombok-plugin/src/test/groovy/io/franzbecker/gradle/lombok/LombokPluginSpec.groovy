@@ -3,6 +3,7 @@ package io.franzbecker.gradle.lombok
 import io.franzbecker.gradle.lombok.task.InstallLombokTask
 import io.franzbecker.gradle.lombok.task.VerifyLombokTask
 import nebula.test.PluginProjectSpec
+
 /**
  * Unit tests for {@link LombokPlugin}.
  */
@@ -78,6 +79,7 @@ class LombokPluginSpec extends PluginProjectSpec {
         VerifyLombokTask verifyLombok = project.tasks[VerifyLombokTask.NAME]
         InstallLombokTask installLombok = project.tasks[InstallLombokTask.NAME]
         verifyLombok in installLombok.getDependsOn()
+        installLombok.group == "IDE"
     }
 
 }
