@@ -72,6 +72,7 @@ class LombokPlugin implements Plugin<Project> {
         project.task(type: InstallLombokTask, InstallLombokTask.NAME).with {
             outputs.upToDateWhen { false }
             dependsOn verifyLombok
+            group = "IDE"
         }
     }
 
