@@ -31,7 +31,7 @@ class DelombokTaskIntegrationTest extends AbstractIntegrationTest {
         and:
         buildFile << """
             dependencies {
-                compile 'org.slf4j:slf4j-api:1.7.12'
+                implementation 'org.slf4j:slf4j-api:1.7.12'
             }
 
             ${delombokTask()}

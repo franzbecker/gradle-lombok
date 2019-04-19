@@ -14,13 +14,11 @@ import spock.lang.Specification
 abstract class AbstractJavaExecTaskSpec extends Specification {
 
     Project project
-    Configuration configuration
 
     void setup() {
         project = ProjectBuilder.builder().build()
         project.apply plugin: 'java'
         project.apply plugin: LombokPlugin.NAME
-        configuration = project.configurations.getByName(LombokPlugin.LOMBOK_CONFIGURATION_NAME)
     }
 
     /**

@@ -7,18 +7,18 @@ import org.gradle.api.plugins.JavaPlugin
  */
 class DelombokTaskSpec extends AbstractJavaExecTaskSpec {
 
-    def "delomok calls JavaExec"() {
+    def "delombok calls JavaExec"() {
         given: "a newly created DelombokTask"
         def task = project.task(type: DelombokTask, "delombok")
         def execAction = mockJavaExecAction(task)
-        def compile = project.configurations.getByName(JavaPlugin.COMPILE_CONFIGURATION_NAME)
+        def expectedClasspath = project.configurations.getByName(JavaPlugin.COMPILE_CLASSPATH_CONFIGURATION_NAME)
 
         when: "task executes"
         task.exec()
 
         then: "Delombok main is called"
         1 * execAction.setMain('lombok.launch.Main')
-        1 * execAction.classpath(configuration, compile)
+        1 * execAction.classpath(expectedClasspath)
         1 * execAction.execute()
     }
 
