@@ -9,12 +9,12 @@
 A Gradle plugin for project [Lombok](https://projectlombok.org) support.
 
 # Usage
-The plugin is included in the [central plugin repository](https://plugins.gradle.org/plugin/io.franzbecker.gradle-lombok/3.0.0). 
+The plugin is included in the [central plugin repository](https://plugins.gradle.org/plugin/io.franzbecker.gradle-lombok/3.1.0). 
 
 A minimal `build.gradle` looks like this:
 
     plugins {
-        id 'io.franzbecker.gradle-lombok' version '3.0.0'
+        id 'io.franzbecker.gradle-lombok' version '3.1.0'
         id 'java'
     }
     
