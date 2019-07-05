@@ -35,7 +35,7 @@ If the verifcation of the integrity shall be skipped, the `sha256` value needs t
         sha256 = "" // skip verifyLombok task
     }
 
-Some example Java code to get started can be found in the [wiki](https://github.com/franzbecker/gradle-lombok/wiki/Lombok-getting-started).
+Some examples can be found in the [examples](https://github.com/franzbecker/gradle-lombok/tree/master/examples) folder.
 
 
 # Motivation
