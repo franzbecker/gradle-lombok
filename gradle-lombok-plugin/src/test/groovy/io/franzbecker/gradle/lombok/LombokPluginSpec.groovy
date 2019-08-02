@@ -4,6 +4,8 @@ import io.franzbecker.gradle.lombok.task.InstallLombokTask
 import io.franzbecker.gradle.lombok.task.VerifyLombokTask
 import nebula.test.PluginProjectSpec
 
+import static io.franzbecker.gradle.lombok.LombokPlugin.LOMBOK_CONFIGURATION_NAME
+
 /**
  * Unit tests for {@link LombokPlugin}.
  */
@@ -31,29 +33,13 @@ class LombokPluginSpec extends PluginProjectSpec {
         assert afterTaskMap == beforeTaskMap
     }
 
-    def "Does not add Lombok configuration if Java plugin is not applied"() {
-        when:
-        project.apply plugin: pluginName
-
-        then:
-        assert !project.configurations.findByName(LombokPlugin.LOMBOK_CONFIGURATION_NAME)
-    }
-
-    def "Add Lombok configuration if Java plugin is applied"() {
-        when:
-        applyJavaAndLombok()
-
-        then:
-        assert project.configurations.findByName(LombokPlugin.LOMBOK_CONFIGURATION_NAME)
-    }
-
     def "Lombok dependency is added"() {
         when:
         applyJavaAndLombok()
         project.evaluate()
 
         then:
-        def lombokConfiguration = project.configurations.findByName(LombokPlugin.LOMBOK_CONFIGURATION_NAME)
+        def lombokConfiguration = project.configurations.findByName(LOMBOK_CONFIGURATION_NAME)
         def dependency = lombokConfiguration.getDependencies().first()
         dependency.group == "org.projectlombok"
         dependency.name == "lombok"
@@ -65,7 +51,7 @@ class LombokPluginSpec extends PluginProjectSpec {
         project.evaluate()
 
         then:
-        def lombokConfiguration = project.configurations.findByName(LombokPlugin.LOMBOK_CONFIGURATION_NAME)
+        def lombokConfiguration = project.configurations.findByName(LOMBOK_CONFIGURATION_NAME)
         lombokConfiguration.getDependencies().each {
             assert !it.isTransitive()
         }

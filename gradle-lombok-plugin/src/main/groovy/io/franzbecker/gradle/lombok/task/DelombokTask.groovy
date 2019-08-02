@@ -1,6 +1,6 @@
 package io.franzbecker.gradle.lombok.task
 
-import io.franzbecker.gradle.lombok.LombokPlugin
+
 import io.franzbecker.gradle.lombok.LombokPluginExtension
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.tasks.Input
