@@ -25,8 +25,8 @@ A minimal `build.gradle` looks like this:
 After applying the plugin, the Lombok annotations can be used directly in any Java code and the Lombok Eclipse installer can be called via `gradlew installLombok`. The Lombok version can be configured using the following syntax:
 
     lombok { // optional: values below are the defaults
-        version = "1.18.8"
-        sha256 = "0396952823579b316a0fe85cbd871bbb3508143c2bcbd985dd7800e806cb24fc"
+        version = "1.18.10"
+        sha256 = "2836e954823bfcbad45e78c18896e3d01058e6f643749810c608b7005ee7b2fa"
     }
 
 If the verifcation of the integrity shall be skipped, the `sha256` value needs to be set to null or an empty string:
