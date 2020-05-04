@@ -7,6 +7,9 @@
 
 A Gradle plugin for project [Lombok](https://projectlombok.org) support.
 
+__Maintenance mode.__ Only critical bugs will be fixed and there won't be any more feature from my side. 
+Please feel free to continue contributing and open PRs, I will still review them in a timely manner.
+
 # Usage
 The plugin is included in the [central plugin repository](https://plugins.gradle.org/plugin/io.franzbecker.gradle-lombok/3.3.0). 
 
