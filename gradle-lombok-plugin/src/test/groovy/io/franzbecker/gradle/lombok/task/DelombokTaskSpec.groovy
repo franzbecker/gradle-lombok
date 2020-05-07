@@ -14,6 +14,7 @@ class DelombokTaskSpec extends AbstractJavaExecTaskSpec {
         def expectedClasspath = project.configurations.getByName(JavaPlugin.COMPILE_CLASSPATH_CONFIGURATION_NAME)
 
         when: "task executes"
+        task.configure {}
         task.exec()
 
         then: "Delombok main is called"

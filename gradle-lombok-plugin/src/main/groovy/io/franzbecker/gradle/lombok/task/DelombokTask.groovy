@@ -1,7 +1,8 @@
 package io.franzbecker.gradle.lombok.task
 
-import io.franzbecker.gradle.lombok.LombokPlugin
+
 import io.franzbecker.gradle.lombok.LombokPluginExtension
+import org.gradle.api.Task
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.JavaExec
@@ -21,14 +22,14 @@ class DelombokTask extends JavaExec {
     }
 
     @Override
-    void exec() {
-        // Retrieve extension and configuration
-        def extension = project.extensions.findByType(LombokPluginExtension)
-        def compile = project.configurations.getByName(compileConfigurationName)
+    Task configure(Closure closure) {
+        setMain(project.extensions.findByType(LombokPluginExtension).main)
+        return super.configure(closure)
+    }
 
-        // Configure JavaExec
-        setMain(extension.main)
-        classpath(compile)
+    @Override
+    void exec() {
+        classpath(project.configurations.getByName(compileConfigurationName))
         super.exec()
     }
 
