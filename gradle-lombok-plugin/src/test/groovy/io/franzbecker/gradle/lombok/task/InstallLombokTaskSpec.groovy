@@ -14,6 +14,7 @@ class InstallLombokTaskSpec extends AbstractJavaExecTaskSpec {
         def expectedClasspath = project.configurations.getByName(LombokPlugin.LOMBOK_CONFIGURATION_NAME)
 
         when:
+        task.configure {}
         task.exec()
 
         then:
