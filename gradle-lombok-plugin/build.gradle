@@ -1,7 +1,7 @@
 plugins {
-    id 'com.jfrog.bintray' version '1.8.4'
-    id 'com.gradle.plugin-publish' version '0.10.0'
-    id 'net.researchgate.release' version '2.8.0'
+    id 'com.jfrog.bintray' version '1.8.5'
+    id 'com.gradle.plugin-publish' version '0.11.0'
+    id 'net.researchgate.release' version '2.8.1'
     id 'pl.droidsonroids.jacoco.testkit' version '1.0.3' // required until https://github.com/gradle/gradle/issues/1465 is resolved
     id 'java-gradle-plugin'
     id 'groovy'
@@ -35,7 +35,7 @@ artifacts {
 }
 
 jacoco {
-    toolVersion = "0.8.3"
+    toolVersion = "0.8.5"
 }
 
 jacocoTestReport {
