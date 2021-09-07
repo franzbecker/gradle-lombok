@@ -38,4 +38,26 @@ class CompatibilityIntegrationTest extends AbstractIntegrationTest {
         '6.4'         || 'build/classes/java'
     }
 
+    def "Gradle #gradleVersion - can run verifyLombok"() {
+        given:
+        theGradleVersion = gradleVersion
+        createSimpleTestCase()
+
+        when: "calling gradle verifyLombok"
+        runBuild('verifyLombok')
+
+        then: "no exception is thrown"
+        noExceptionThrown()
+
+        where:
+        gradleVersion || classesPath
+        '2.12'        || 'build/classes'
+        '2.14.1'      || 'build/classes'
+        '3.5'         || 'build/classes'
+        '4.2.1'       || 'build/classes/java'
+        '4.7'         || 'build/classes/java'
+        '5.4'         || 'build/classes/java'
+        '6.4'         || 'build/classes/java'
+    }
+
 }
