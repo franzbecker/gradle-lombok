@@ -17,7 +17,7 @@ class CompatibilityIntegrationTest extends AbstractIntegrationTest {
     def "Gradle #gradleVersion - can compile and test @Data annotation"() {
         given:
         theGradleVersion = gradleVersion
-        createSimpleTestCase()
+        createSimpleTestCase(testConfigurationName)
 
         when: "calling gradle test"
         runBuild('test')
@@ -28,20 +28,22 @@ class CompatibilityIntegrationTest extends AbstractIntegrationTest {
         new File(projectDir, "$classesPath/test/com/example/HelloWorldTest.class").exists()
 
         where:
-        gradleVersion || classesPath
-        '2.12'        || 'build/classes'
-        '2.14.1'      || 'build/classes'
-        '3.5'         || 'build/classes'
-        '4.2.1'       || 'build/classes/java'
-        '4.7'         || 'build/classes/java'
-        '5.4'         || 'build/classes/java'
-        '6.4'         || 'build/classes/java'
+        gradleVersion || classesPath          || testConfigurationName
+        '2.12'        || 'build/classes'      || 'testCompile'
+        '2.14.1'      || 'build/classes'      || 'testCompile'
+        '3.5'         || 'build/classes'      || 'testCompile'
+        '4.2.1'       || 'build/classes/java' || 'testCompile'
+        '4.7'         || 'build/classes/java' || 'testCompile'
+        '5.4'         || 'build/classes/java' || 'testCompile'
+        '6.4'         || 'build/classes/java' || 'testCompile'
+        '6.4'         || 'build/classes/java' || 'testImplementation'
+        '7.0'         || 'build/classes/java' || 'testImplementation'
     }
 
     def "Gradle #gradleVersion - can run verifyLombok"() {
         given:
         theGradleVersion = gradleVersion
-        createSimpleTestCase()
+        createSimpleTestCase(testConfigurationName)
 
         when: "calling gradle verifyLombok"
         runBuild('verifyLombok')
@@ -50,14 +52,15 @@ class CompatibilityIntegrationTest extends AbstractIntegrationTest {
         noExceptionThrown()
 
         where:
-        gradleVersion || classesPath
-        '2.12'        || 'build/classes'
-        '2.14.1'      || 'build/classes'
-        '3.5'         || 'build/classes'
-        '4.2.1'       || 'build/classes/java'
-        '4.7'         || 'build/classes/java'
-        '5.4'         || 'build/classes/java'
-        '6.4'         || 'build/classes/java'
+        gradleVersion || classesPath          || testConfigurationName
+        '2.12'        || 'build/classes'      || 'testCompile'
+        '2.14.1'      || 'build/classes'      || 'testCompile'
+        '3.5'         || 'build/classes'      || 'testCompile'
+        '4.2.1'       || 'build/classes/java' || 'testCompile'
+        '4.7'         || 'build/classes/java' || 'testCompile'
+        '5.4'         || 'build/classes/java' || 'testCompile'
+        '6.4'         || 'build/classes/java' || 'testCompile'
+        '7.0'         || 'build/classes/java' || 'testImplementation'
     }
 
 }
