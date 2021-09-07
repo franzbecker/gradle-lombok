@@ -26,6 +26,7 @@ class VerifyLombokTaskSpec extends Specification {
         project.apply plugin: LombokPlugin.NAME
         task = project.tasks.getByName(VerifyLombokTask.NAME)
         configuration.iterator() >> Mock(Iterator)
+        configuration.getName() >> LombokPlugin.VERIFY_LOMBOK_CLASSPATH_CONFIGURATION_NAME
     }
 
     def "Fails if Lombok JAR is not found"() {
@@ -37,7 +38,7 @@ class VerifyLombokTaskSpec extends Specification {
 
         then:
         GradleException e = thrown()
-        e.message == "Could not find 'lombok-${version}.jar' in dependencies of configuration 'compileOnly'."
+        e.message == "Could not find 'lombok-${version}.jar' in dependencies of configuration 'compileClasspath'."
     }
 
     def "Does not fail if file integrity is fulfilled"() {

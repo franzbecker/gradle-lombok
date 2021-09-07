@@ -25,6 +25,7 @@ class LombokPlugin implements Plugin<Project> {
 
     static final String NAME = "io.franzbecker.gradle-lombok"
     static final String LOMBOK_CONFIGURATION_NAME = COMPILE_ONLY_CONFIGURATION_NAME
+    static final String VERIFY_LOMBOK_CLASSPATH_CONFIGURATION_NAME = COMPILE_CLASSPATH_CONFIGURATION_NAME
 
     @Override
     void apply(Project project) {
