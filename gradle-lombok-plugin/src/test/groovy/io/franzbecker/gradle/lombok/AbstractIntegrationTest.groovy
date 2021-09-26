@@ -76,10 +76,14 @@ abstract class AbstractIntegrationTest extends Specification {
     }
 
     protected void createSimpleTestCase() {
+        createSimpleTestCase("testCompile")
+    }
+
+    protected void createSimpleTestCase(String testConfigurationName) {
         // build configuration supporting JUnit
         buildFile << """
             dependencies {
-                testCompile 'junit:junit:4.12'
+                ${testConfigurationName} 'junit:junit:4.12'
             }
         """.stripIndent()
 
