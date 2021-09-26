@@ -11,12 +11,12 @@ __Maintenance mode.__ Only critical bugs will be fixed and there won't be any mo
 Please feel free to continue contributing and open PRs, I will still review them in a timely manner.
 
 # Usage
-The plugin is included in the [central plugin repository](https://plugins.gradle.org/plugin/io.franzbecker.gradle-lombok/4.0.0). 
+The plugin is included in the [central plugin repository](https://plugins.gradle.org/plugin/io.franzbecker.gradle-lombok/5.0.0). 
 
 A minimal `build.gradle` looks like this:
 
     plugins {
-        id 'io.franzbecker.gradle-lombok' version '4.0.0'
+        id 'io.franzbecker.gradle-lombok' version '5.0.0'
         id 'java'
     }
     
