@@ -92,8 +92,8 @@ abstract class AbstractIntegrationTest extends Specification {
         createTestSource()
     }
 
-    private void createJavaSource() {
-        def file = createFile("src/main/java/com/example/HelloWorld.java")
+    protected void createJavaSource(String baseSrcDir = "src/main/java") {
+        def file = createFile("${baseSrcDir}/com/example/HelloWorld.java")
         file << """\
             package com.example;
 
@@ -108,8 +108,8 @@ abstract class AbstractIntegrationTest extends Specification {
         """.stripIndent()
     }
 
-    private void createTestSource() {
-        def file = createFile("src/test/java/com/example/HelloWorldTest.java")
+    protected void createTestSource(String baseSrcDir = "src/test/java") {
+        def file = createFile("${baseSrcDir}/com/example/HelloWorldTest.java")
         file << """\
             package com.example;
 
