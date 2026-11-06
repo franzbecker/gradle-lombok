@@ -7,7 +7,7 @@ import org.gradle.api.tasks.JavaExec
 /**
  * Invokes the Lombok UI so that the user can install it into the IDE.
  */
-class InstallLombokTask extends JavaExec {
+abstract class InstallLombokTask extends JavaExec {
 
     static final String NAME = "installLombok"
 

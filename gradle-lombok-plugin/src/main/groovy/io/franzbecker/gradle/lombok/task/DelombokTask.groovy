@@ -9,7 +9,7 @@ import org.gradle.api.tasks.JavaExec
  * Task type for delomboking. Not added to the project by default,
  * has to be instantiated and configured in the using gradle build.
  */
-class DelombokTask extends JavaExec {
+abstract class DelombokTask extends JavaExec {
 
     @Input
     String compileConfigurationName = JavaPlugin.COMPILE_CLASSPATH_CONFIGURATION_NAME
