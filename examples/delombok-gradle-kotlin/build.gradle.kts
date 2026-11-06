@@ -4,21 +4,20 @@ tasks {
 
     val delombok by registering(DelombokTask::class) {
         dependsOn(compileJava)
-        val outputDir by extra { layout.buildDirectory.dir("delombok").get().asFile }
+        val outputDir = layout.buildDirectory.dir("delombok").get().asFile
         outputs.dir(outputDir)
         sourceSets["main"].java.srcDirs.forEach {
             inputs.dir(it)
             args(it, "-d", outputDir)
         }
         doFirst {
-            outputDir.delete()
+            outputDir.deleteRecursively()
         }
     }
 
     javadoc {
-        dependsOn(delombok)
-        val outputDir: File by delombok.get().extra
-        source = fileTree(outputDir)
+        // use the delomboked sources (this also adds the task dependency)
+        setSource(delombok)
         isFailOnError = false
     }
 
