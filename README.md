@@ -1,4 +1,15 @@
 # gradle-lombok
+
+> [!WARNING]
+> **Security notice:** The domain `franzbecker.io` (including `blog.franzbecker.io`) is **no longer owned by the maintainer** of this project. It now belongs to an unrelated third party and has reportedly been used to distribute malware.
+> **Do not visit it and do not download anything from it.**
+>
+> The only official sources for this plugin are:
+> - this GitHub repository: https://github.com/franzbecker/gradle-lombok
+> - the Gradle Plugin Portal: https://plugins.gradle.org/plugin/io.franzbecker.gradle-lombok
+>
+> The plugin itself is not affected. The plugin ID `io.franzbecker.gradle-lombok` and the group `io.franzbecker` remain unchanged.
+
 [![License](http://img.shields.io/badge/license-Apache_2.0-blue.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0.html)
 [![Build Status](https://app.travis-ci.com/franzbecker/gradle-lombok.svg?branch=master)](https://app.travis-ci.com/franzbecker/gradle-lombok)
 [![codecov.io](http://codecov.io/github/franzbecker/gradle-lombok/coverage.svg?branch=master)](http://codecov.io/github/franzbecker/gradle-lombok?branch=master)
