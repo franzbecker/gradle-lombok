@@ -19,11 +19,17 @@ class VerifyLombokTask extends DefaultTask {
     @Internal
     HashUtil hashUtil = new HashUtil()
 
+    // captured at configuration time, accessing Task.project during execution is deprecated
+    private final LombokPluginExtension extension
+    private final Configuration configuration
+
+    VerifyLombokTask() {
+        extension = project.extensions.findByType(LombokPluginExtension)
+        configuration = project.configurations.getByName(LombokPlugin.VERIFY_LOMBOK_CLASSPATH_CONFIGURATION_NAME)
+    }
+
     @TaskAction
     void verifyLombok() {
-        // Retrieve extension and configuration
-        def extension = project.extensions.findByType(LombokPluginExtension)
-        def configuration = project.configurations.getByName(LombokPlugin.VERIFY_LOMBOK_CLASSPATH_CONFIGURATION_NAME)
         verifyLombok(extension, configuration)
     }
 
