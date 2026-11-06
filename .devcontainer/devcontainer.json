@@ -18,7 +18,7 @@
     "ghcr.io/anthropics/devcontainer-features/claude-code"
   ],
   "mounts": [
-    "source=claude-code-config,target=/home/vscode/.claude,type=volume",
+    "source=claude-code-config-${devcontainerId},target=/home/vscode/.claude,type=volume",
     "source=gh-config,target=/home/vscode/.config/gh,type=volume"
   ],
   "containerEnv": {
