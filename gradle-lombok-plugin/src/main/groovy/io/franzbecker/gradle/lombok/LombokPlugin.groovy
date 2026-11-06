@@ -5,6 +5,8 @@ import io.franzbecker.gradle.lombok.task.VerifyLombokTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPlugin
+import org.gradle.api.plugins.JavaPluginConvention
+import org.gradle.api.tasks.SourceSet
 import org.gradle.util.GradleVersion
 
 import static org.gradle.api.plugins.JavaPlugin.*
@@ -40,13 +42,14 @@ class LombokPlugin implements Plugin<Project> {
     }
 
     private void addLombokDependency(Project project) {
-        addLombokDependency(project, COMPILE_ONLY_CONFIGURATION_NAME)
-        addLombokDependency(project, TEST_COMPILE_ONLY_CONFIGURATION_NAME)
-
         boolean atLeastGradle4_6 = GradleVersion.version(project.gradle.gradleVersion) >= GradleVersion.version('4.6')
-        if (atLeastGradle4_6) {
-            addLombokDependency(project, ANNOTATION_PROCESSOR_CONFIGURATION_NAME)
-            addLombokDependency(project, TEST_ANNOTATION_PROCESSOR_CONFIGURATION_NAME)
+
+        JavaPluginConvention javaConvention = project.getConvention().getPlugin(JavaPluginConvention.class);
+        javaConvention.getSourceSets().all { SourceSet sourceSet ->
+            addLombokDependency(project, sourceSet.getCompileOnlyConfigurationName())
+            if (atLeastGradle4_6) {
+                addLombokDependency(project, sourceSet.getAnnotationProcessorConfigurationName())
+            }
         }
     }
 
