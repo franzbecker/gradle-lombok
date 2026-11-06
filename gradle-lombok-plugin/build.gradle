@@ -64,8 +64,10 @@ gradlePlugin {
 
 tasks.register('updateReadmeVersion') {
     def readme = rootProject.file('../README.md')
-    def version = project.version.toString()
+    // evaluated lazily: the release plugin sets the release version during execution
+    def releaseVersion = provider { project.version.toString() }
     doLast {
+        def version = releaseVersion.get()
         def versionPattern = /\d+.\d+(.\d+)?/
         def encoding = 'UTF-8'
 
