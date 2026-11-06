@@ -1,7 +1,7 @@
 import io.franzbecker.gradle.lombok.task.DelombokTask
 
 task delombok(type: DelombokTask, dependsOn: compileJava) {
-    ext.outputDir = file("$buildDir/delombok")
+    def outputDir = layout.buildDirectory.dir("delombok").get().asFile
     outputs.dir(outputDir)
     sourceSets.main.java.srcDirs.each {
         inputs.dir(it)
@@ -13,7 +13,7 @@ task delombok(type: DelombokTask, dependsOn: compileJava) {
 }
 
 javadoc {
-    dependsOn delombok
-    source = delombok.outputDir
+    // use the delomboked sources (this also adds the task dependency)
+    source = delombok
     failOnError = false
 }

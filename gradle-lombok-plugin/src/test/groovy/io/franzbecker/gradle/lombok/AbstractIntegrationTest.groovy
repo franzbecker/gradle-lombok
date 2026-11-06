@@ -3,23 +3,20 @@ package io.franzbecker.gradle.lombok
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
-import org.junit.Rule
-import org.junit.rules.TemporaryFolder
 import spock.lang.Specification
+import spock.lang.TempDir
 
 /**
  * Abstract base class for integration tests.
  */
 abstract class AbstractIntegrationTest extends Specification {
 
-    @Rule
-    TemporaryFolder testProjectDir
+    @TempDir
     File projectDir
     File buildFile
     File propertiesFile
 
     def setup() {
-        projectDir = testProjectDir.root
         buildFile = createFile('build.gradle')
         writeDefaultBuildFileContents()
         propertiesFile = createFile('gradle.properties')
@@ -33,7 +30,7 @@ abstract class AbstractIntegrationTest extends Specification {
                 id '${LombokPlugin.NAME}'
             }
             repositories {
-                jcenter()
+                mavenCentral()
             }
         """.stripIndent()
     }
@@ -76,7 +73,7 @@ abstract class AbstractIntegrationTest extends Specification {
     }
 
     protected void createSimpleTestCase() {
-        createSimpleTestCase("testCompile")
+        createSimpleTestCase("testImplementation")
     }
 
     protected void createSimpleTestCase(String testConfigurationName) {

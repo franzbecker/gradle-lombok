@@ -2,6 +2,7 @@ package io.franzbecker.gradle.lombok
 
 import io.franzbecker.gradle.lombok.task.InstallLombokTask
 import io.franzbecker.gradle.lombok.task.VerifyLombokTask
+import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPlugin
@@ -26,9 +27,14 @@ class LombokPlugin implements Plugin<Project> {
     static final String NAME = "io.franzbecker.gradle-lombok"
     static final String LOMBOK_CONFIGURATION_NAME = COMPILE_ONLY_CONFIGURATION_NAME
     static final String VERIFY_LOMBOK_CLASSPATH_CONFIGURATION_NAME = COMPILE_CLASSPATH_CONFIGURATION_NAME
+    static final GradleVersion MINIMUM_GRADLE_VERSION = GradleVersion.version('7.3')
 
     @Override
     void apply(Project project) {
+        if (GradleVersion.current().baseVersion < MINIMUM_GRADLE_VERSION) {
+            throw new GradleException("The ${NAME} plugin requires ${MINIMUM_GRADLE_VERSION} or later " +
+                    "(found ${GradleVersion.current()}). Use version 5.0.0 of the plugin for older Gradle versions.")
+        }
         project.extensions.create(LombokPluginExtension.NAME, LombokPluginExtension)
 
         project.plugins.withType(JavaPlugin) {
@@ -42,12 +48,8 @@ class LombokPlugin implements Plugin<Project> {
     private void addLombokDependency(Project project) {
         addLombokDependency(project, COMPILE_ONLY_CONFIGURATION_NAME)
         addLombokDependency(project, TEST_COMPILE_ONLY_CONFIGURATION_NAME)
-
-        boolean atLeastGradle4_6 = GradleVersion.version(project.gradle.gradleVersion) >= GradleVersion.version('4.6')
-        if (atLeastGradle4_6) {
-            addLombokDependency(project, ANNOTATION_PROCESSOR_CONFIGURATION_NAME)
-            addLombokDependency(project, TEST_ANNOTATION_PROCESSOR_CONFIGURATION_NAME)
-        }
+        addLombokDependency(project, ANNOTATION_PROCESSOR_CONFIGURATION_NAME)
+        addLombokDependency(project, TEST_ANNOTATION_PROCESSOR_CONFIGURATION_NAME)
     }
 
     private void addLombokDependency(Project project, String configurationName) {

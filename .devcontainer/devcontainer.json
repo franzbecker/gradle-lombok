@@ -3,8 +3,7 @@
   "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
   "features": {
     "ghcr.io/devcontainers/features/java:1": {
-      "version": "8",
-      "additionalVersions": "11",
+      "version": "17",
       "jdkDistro": "tem"
     },
     "ghcr.io/devcontainers/features/node:1": {

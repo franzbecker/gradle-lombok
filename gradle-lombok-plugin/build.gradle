@@ -1,112 +1,96 @@
 plugins {
-    id 'com.gradle.plugin-publish' version '0.11.0'
-    id 'net.researchgate.release' version '2.8.1'
-    id 'pl.droidsonroids.jacoco.testkit' version '1.0.3' // required until https://github.com/gradle/gradle/issues/1465 is resolved
+    id 'com.gradle.plugin-publish' version '2.2.1'
+    id 'net.researchgate.release' version '3.2.0'
+    id 'pl.droidsonroids.jacoco.testkit' version '1.0.12' // required until https://github.com/gradle/gradle/issues/1465 is resolved
     id 'java-gradle-plugin'
     id 'groovy'
-    id 'maven'
     id 'jacoco'
-    id 'maven-publish'
 }
 
-group 'io.franzbecker'
+group = 'io.franzbecker'
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+java {
+    // keep Java 8 bytecode so the plugin still runs on Gradle 7.x builds using Java 8
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.release = 8
+}
 
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 dependencies {
-    testCompile 'junit:junit:4.12'
-    testCompile gradleTestKit()
-    testCompile 'com.netflix.nebula:nebula-test:6.1.2'
+    testImplementation platform('org.spockframework:spock-bom:2.5-groovy-3.0')
+    testImplementation 'org.spockframework:spock-core'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier 'sources'
-    from sourceSets.main.allSource
-}
-
-artifacts {
-    archives sourcesJar
+tasks.named('test') {
+    useJUnitPlatform()
+    // integration tests download Gradle distributions and run builds
+    maxParallelForks = Math.max(1, Runtime.runtime.availableProcessors().intdiv(2))
 }
 
 jacoco {
-    toolVersion = "0.8.3"
+    toolVersion = "0.8.16"
 }
 
 jacocoTestReport {
     reports {
-        xml.enabled = true
-        html.enabled = true
+        xml.required = true
+        html.required = true
     }
 }
 
 check.dependsOn jacocoTestReport
 
 gradlePlugin {
+    website = 'https://github.com/franzbecker/gradle-lombok'
+    vcsUrl = 'https://github.com/franzbecker/gradle-lombok.git'
     plugins {
         lombokPlugin {
             id = 'io.franzbecker.gradle-lombok'
             displayName = 'Gradle Lombok plugin'
             description = 'A gradle plugin that simplifies the usage of the Lombok annotation processor.'
             implementationClass = 'io.franzbecker.gradle.lombok.LombokPlugin'
+            tags.set(['gradle', 'lombok'])
         }
     }
 }
 
-pluginBundle {
-    website = 'https://github.com/franzbecker/gradle-lombok'
-    vcsUrl = 'https://github.com/franzbecker/gradle-lombok.git'
-    tags = ['gradle', 'lombok']
-
-    plugins {
-        lombokPlugin {
-            id = 'io.franzbecker.gradle-lombok'
-        }
-    }
-
-    mavenCoordinates {
-        groupId = 'io.franzbecker'
-        artifactId = 'gradle-lombok'
-    }
-}
-
-task updateReadmeVersion {
+tasks.register('updateReadmeVersion') {
+    def readme = rootProject.file('../README.md')
+    // evaluated lazily: the release plugin sets the release version during execution
+    def releaseVersion = provider { project.version.toString() }
     doLast {
+        def version = releaseVersion.get()
         def versionPattern = /\d+.\d+(.\d+)?/
         def encoding = 'UTF-8'
-        File file = new File("../README.md")
 
         // String replacements - Readme isn't long enough to justify advanced code ;)
-        String text = file.getText(encoding)
-        text = text.replaceAll("gradle-lombok' version '${versionPattern}'", "gradle-lombok' version '${project.version}'")
-        text = text.replaceAll("gradle-lombok/${versionPattern}", "gradle-lombok/${project.version}")
+        String text = readme.getText(encoding)
+        text = text.replaceAll("gradle-lombok' version '${versionPattern}'", "gradle-lombok' version '${version}'")
+        text = text.replaceAll("gradle-lombok/${versionPattern}", "gradle-lombok/${version}")
 
-        file.setText(text, encoding)
+        readme.setText(text, encoding)
     }
 }
-updateReadmeVersion.shouldRunAfter tasks.getByName('confirmReleaseVersion')
 
 /*
  * Configure release plugin.
- * Remove tasks "updateVersion" and "commitNewVersion" as we don't want the new SNAPSHOT
+ * Skip "updateVersion" and "commitNewVersion" as we don't want the new SNAPSHOT
  * version commit on the master branch.
  */
-tasks.release.tasks -= ["updateVersion", "commitNewVersion"]
+tasks.named('updateVersion') { enabled = false }
+tasks.named('commitNewVersion') { enabled = false }
+tasks.named('updateReadmeVersion') { shouldRunAfter 'confirmReleaseVersion' }
+tasks.named('preTagCommit') { dependsOn 'updateReadmeVersion' }
 release {
     preTagCommitMessage = '[release] '
     tagCommitMessage = '[release] '
     tagTemplate = 'v${version}'
-}
-tasks.getByName('preTagCommit').dependsOn updateReadmeVersion
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-        }
-    }
 }
