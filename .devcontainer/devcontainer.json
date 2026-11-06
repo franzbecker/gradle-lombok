@@ -19,7 +19,7 @@
   ],
   "mounts": [
     "source=claude-code-config-${devcontainerId},target=/home/vscode/.claude,type=volume",
-    "source=gh-config,target=/home/vscode/.config/gh,type=volume"
+    "source=gh-config-${devcontainerId},target=/home/vscode/.config/gh,type=volume"
   ],
   "containerEnv": {
     "CLAUDE_CONFIG_DIR": "/home/vscode/.claude"
