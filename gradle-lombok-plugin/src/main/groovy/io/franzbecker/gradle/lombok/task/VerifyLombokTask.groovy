@@ -4,7 +4,8 @@ import io.franzbecker.gradle.lombok.LombokPlugin
 import io.franzbecker.gradle.lombok.LombokPluginExtension
 import io.franzbecker.gradle.lombok.util.HashUtil
 import org.gradle.api.DefaultTask
-import org.gradle.api.artifacts.Configuration
+import org.gradle.api.file.FileCollection
+import org.gradle.api.provider.Provider
 import org.gradle.api.resources.ResourceException
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
@@ -19,25 +20,30 @@ class VerifyLombokTask extends DefaultTask {
     @Internal
     HashUtil hashUtil = new HashUtil()
 
-    // captured at configuration time, accessing Task.project during execution is deprecated
-    private final LombokPluginExtension extension
-    private final Configuration configuration
+    // Captured at configuration time: accessing Task.project during execution is deprecated,
+    // and Configuration objects are not supported by the configuration cache.
+    private final String classpathName = LombokPlugin.VERIFY_LOMBOK_CLASSPATH_CONFIGURATION_NAME
+    private final Provider<String> lombokVersion
+    private final Provider<String> lombokSha256
+    private final FileCollection lombokClasspath
 
     VerifyLombokTask() {
-        extension = project.extensions.findByType(LombokPluginExtension)
-        configuration = project.configurations.getByName(LombokPlugin.VERIFY_LOMBOK_CLASSPATH_CONFIGURATION_NAME)
+        def extension = project.extensions.findByType(LombokPluginExtension)
+        lombokVersion = project.provider { extension.version }
+        lombokSha256 = project.provider { extension.sha256 }
+        lombokClasspath = project.files(project.configurations.getByName(classpathName))
     }
 
     @TaskAction
     void verifyLombok() {
-        verifyLombok(extension, configuration)
+        verifyLombok(lombokVersion.getOrNull(), lombokSha256.getOrNull(), lombokClasspath)
     }
 
-    protected verifyLombok(LombokPluginExtension extension, Configuration configuration) {
-        if (extension.sha256) {
+    protected void verifyLombok(String version, String sha256, FileCollection classpath) {
+        if (sha256) {
             // Lookup JAR and verify it
-            def lombokJar = getLombokJar(extension.version, configuration)
-            verifyIntegrity(extension.sha256, lombokJar)
+            def lombokJar = getLombokJar(version, classpath)
+            verifyIntegrity(sha256, lombokJar)
         } else {
             logger.info("Skipping verification of Lombok since SHA-256 was not configured.")
         }
@@ -48,13 +54,13 @@ class VerifyLombokTask extends DefaultTask {
      *
      * @throws org.gradle.api.resources.ResourceException if the JAR cannot be resolved
      */
-    protected File getLombokJar(String lombokVersion, Configuration configuration) {
+    protected File getLombokJar(String lombokVersion, FileCollection classpath) {
         // Retrieve file
         def lombokFileName = "lombok-${lombokVersion}.jar"
-        logger.debug("Searching for '${lombokFileName}' in dependencies of configuration '${configuration.name}'.")
-        def lombokJar = configuration.files.find { File file -> file.name == lombokFileName }
+        logger.debug("Searching for '${lombokFileName}' in dependencies of configuration '${classpathName}'.")
+        def lombokJar = classpath.files.find { File file -> file.name == lombokFileName }
         if (!lombokJar) {
-            throw new ResourceException("Could not find '${lombokFileName}' in dependencies of configuration '${configuration.name}'.")
+            throw new ResourceException("Could not find '${lombokFileName}' in dependencies of configuration '${classpathName}'.")
         }
         logger.debug("Found '${lombokJar}'.")
         return lombokJar

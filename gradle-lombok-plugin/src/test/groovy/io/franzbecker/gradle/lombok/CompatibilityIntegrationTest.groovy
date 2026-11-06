@@ -50,4 +50,22 @@ class CompatibilityIntegrationTest extends AbstractIntegrationTest {
         gradleVersion << GRADLE_VERSIONS
     }
 
+    def "Gradle #gradleVersion - can run verifyLombok with the configuration cache"() {
+        given:
+        theGradleVersion = gradleVersion
+        createSimpleTestCase()
+        // the JaCoCo agent is not supported for TestKit builds with the configuration cache before Gradle 9
+        propertiesFile.text = ''
+
+        when: "calling gradle verifyLombok twice with the configuration cache enabled"
+        runBuild('verifyLombok', '--configuration-cache')
+        def result = runBuild('verifyLombok', '--configuration-cache')
+
+        then: "the cached configuration is reused"
+        result.output.contains('Reusing configuration cache.')
+
+        where:
+        gradleVersion << GRADLE_VERSIONS
+    }
+
 }
