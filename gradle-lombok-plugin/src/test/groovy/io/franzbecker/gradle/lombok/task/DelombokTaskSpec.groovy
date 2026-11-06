@@ -17,7 +17,7 @@ class DelombokTaskSpec extends AbstractJavaExecTaskSpec {
         DelombokTask task = project.task(type: DelombokTask, "delombok")
 
         then:
-        task.main == 'lombok.launch.Main'
+        task.mainClass.get() == 'lombok.launch.Main'
         task.classpath.files == [mainJar] as Set
     }
 
@@ -29,7 +29,7 @@ class DelombokTaskSpec extends AbstractJavaExecTaskSpec {
         project.extensions.getByType(LombokPluginExtension).main = 'custom.Main'
 
         then:
-        task.main == 'custom.Main'
+        task.mainClass.get() == 'custom.Main'
     }
 
     def "delombok uses configured compileConfigurationName"() {

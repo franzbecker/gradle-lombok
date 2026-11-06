@@ -1,10 +1,14 @@
 package io.franzbecker.gradle.lombok
 
 import org.gradle.testkit.runner.GradleRunner
-import spock.lang.Unroll
 
-@Unroll
+/**
+ * Runs the plugin against the supported range of Gradle versions,
+ * from {@link LombokPlugin#MINIMUM_GRADLE_VERSION} up to the latest release.
+ */
 class CompatibilityIntegrationTest extends AbstractIntegrationTest {
+
+    static final List<String> GRADLE_VERSIONS = ['7.3.3', '7.6.6', '8.14.6', '9.8.2']
 
     String theGradleVersion
 
@@ -17,33 +21,24 @@ class CompatibilityIntegrationTest extends AbstractIntegrationTest {
     def "Gradle #gradleVersion - can compile and test @Data annotation"() {
         given:
         theGradleVersion = gradleVersion
-        createSimpleTestCase(testConfigurationName)
+        createSimpleTestCase()
 
         when: "calling gradle test"
         runBuild('test')
 
         then: "build is successful and both class file exist"
         noExceptionThrown()
-        new File(projectDir, "$classesPath/main/com/example/HelloWorld.class").exists()
-        new File(projectDir, "$classesPath/test/com/example/HelloWorldTest.class").exists()
+        new File(projectDir, "build/classes/java/main/com/example/HelloWorld.class").exists()
+        new File(projectDir, "build/classes/java/test/com/example/HelloWorldTest.class").exists()
 
         where:
-        gradleVersion || classesPath          || testConfigurationName
-        '2.12'        || 'build/classes'      || 'testCompile'
-        '2.14.1'      || 'build/classes'      || 'testCompile'
-        '3.5'         || 'build/classes'      || 'testCompile'
-        '4.2.1'       || 'build/classes/java' || 'testCompile'
-        '4.7'         || 'build/classes/java' || 'testCompile'
-        '5.4'         || 'build/classes/java' || 'testCompile'
-        '6.4'         || 'build/classes/java' || 'testCompile'
-        '6.4'         || 'build/classes/java' || 'testImplementation'
-        '7.0'         || 'build/classes/java' || 'testImplementation'
+        gradleVersion << GRADLE_VERSIONS
     }
 
     def "Gradle #gradleVersion - can run verifyLombok"() {
         given:
         theGradleVersion = gradleVersion
-        createSimpleTestCase(testConfigurationName)
+        createSimpleTestCase()
 
         when: "calling gradle verifyLombok"
         runBuild('verifyLombok')
@@ -52,15 +47,7 @@ class CompatibilityIntegrationTest extends AbstractIntegrationTest {
         noExceptionThrown()
 
         where:
-        gradleVersion || classesPath          || testConfigurationName
-        '2.12'        || 'build/classes'      || 'testCompile'
-        '2.14.1'      || 'build/classes'      || 'testCompile'
-        '3.5'         || 'build/classes'      || 'testCompile'
-        '4.2.1'       || 'build/classes/java' || 'testCompile'
-        '4.7'         || 'build/classes/java' || 'testCompile'
-        '5.4'         || 'build/classes/java' || 'testCompile'
-        '6.4'         || 'build/classes/java' || 'testCompile'
-        '7.0'         || 'build/classes/java' || 'testImplementation'
+        gradleVersion << GRADLE_VERSIONS
     }
 
 }

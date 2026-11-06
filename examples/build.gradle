@@ -1,29 +1,21 @@
-buildscript {
-    repositories {
-        maven {
-            url 'https://plugins.gradle.org/m2/'
-        }
-    }
-    dependencies {
-        classpath 'io.franzbecker:gradle-lombok:2.0'
-    }
-}
-
-allprojects {
-    repositories {
-        jcenter()
-    }
+plugins {
+    // resolved from the included build, see settings.gradle
+    id 'io.franzbecker.gradle-lombok' apply false
 }
 
 subprojects {
     apply plugin: 'java'
     apply plugin: 'io.franzbecker.gradle-lombok'
 
+    repositories {
+        mavenCentral()
+    }
+
     dependencies {
-        testCompile 'org.assertj:assertj-core:3.11.1'
-        testCompile 'org.junit.jupiter:junit-jupiter-api:5.3.2'
-        testCompile 'org.junit.jupiter:junit-jupiter-params:5.3.2'
-        testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.3.2'
+        testImplementation 'org.assertj:assertj-core:3.27.3'
+        testImplementation platform('org.junit:junit-bom:5.12.2')
+        testImplementation 'org.junit.jupiter:junit-jupiter'
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     }
 
     test {

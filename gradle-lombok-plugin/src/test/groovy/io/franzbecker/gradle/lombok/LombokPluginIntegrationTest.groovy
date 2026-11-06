@@ -1,6 +1,7 @@
 package io.franzbecker.gradle.lombok
 
-import groovy.util.slurpersupport.GPathResult
+import groovy.xml.XmlSlurper
+import groovy.xml.slurpersupport.GPathResult
 
 /**
  * Integration tests for {@link LombokPlugin}.
@@ -15,7 +16,7 @@ class LombokPluginIntegrationTest extends AbstractIntegrationTest {
         given: "a valid build configuration"
         buildFile << """
             dependencies {
-                testCompile 'junit:junit:4.12'
+                testImplementation 'junit:junit:4.12'
             }
         """.stripIndent()
 
@@ -36,7 +37,7 @@ class LombokPluginIntegrationTest extends AbstractIntegrationTest {
         given:
         buildFile << """
             dependencies {
-                testCompile 'junit:junit:4.12'
+                testImplementation 'junit:junit:4.12'
             }
         """.stripIndent()
 
@@ -65,34 +66,13 @@ class LombokPluginIntegrationTest extends AbstractIntegrationTest {
         new File(projectDir, "build/classes/java/test/com/example/HelloWorldTest.class").exists()
     }
 
-    def "Dependency does not occur in generated POM using the 'maven' plugin"() {
-        given: "a valid build configuration"
-        buildFile << """
-            apply plugin: 'maven'
-
-            dependencies {
-                testCompile 'junit:junit:4.12'
-            }
-        """.stripIndent()
-
-        when: "calling gradle install"
-        runBuild('install')
-
-        then: "Parse POM and retrieve <dependencies> object"
-        def parsedXml = findAndParsePom("build/poms/pom-default.xml")
-        def dependencies = parsedXml.dependencies
-        assert dependencies.size() == 1
-        assert dependencies.dependency.find { it.artifactId.text() == 'junit' }
-        assert !dependencies.dependency.find { it.artifactId.text() == 'lombok' }
-    }
-
     def "Dependency does not occur in generated POM using the 'maven-publish' plugin"() {
         given:
         buildFile << '''
             apply plugin: 'maven-publish'
             
             dependencies {
-                compile 'javax.inject:javax.inject:1'
+                implementation 'javax.inject:javax.inject:1'
             }
             
             publishing {
@@ -103,10 +83,8 @@ class LombokPluginIntegrationTest extends AbstractIntegrationTest {
                 }   
             }
             
-            model {
-                tasks.generatePomFileForMavenJavaPublication {
-                    destination = file("$buildDir/generated-pom.xml")
-                }
+            tasks.named('generatePomFileForMavenJavaPublication') {
+                destination = layout.buildDirectory.file("generated-pom.xml").get().asFile
             }
         '''.stripIndent()
 

@@ -68,12 +68,16 @@ class DelombokTaskIntegrationTest extends AbstractIntegrationTest {
 
         and:
         buildFile << """
-            dependencies {
-// TODO this doesn't make sense any more
-                compileOnly "com.google.guava:guava:20.0" // 20.0 for Java 7 support
+            configurations {
+                delombokExtra
             }
 
-            ${delombokTask("classpath += project.configurations.compileOnly")}
+            dependencies {
+                compileOnly "com.google.guava:guava:20.0"
+                delombokExtra "com.google.guava:guava:20.0"
+            }
+
+            ${delombokTask("classpath += project.configurations.delombokExtra")}
         """
 
         when:
@@ -109,7 +113,7 @@ class DelombokTaskIntegrationTest extends AbstractIntegrationTest {
             import io.franzbecker.gradle.lombok.task.DelombokTask
 
             task delombok(type: DelombokTask, dependsOn: compileJava) {
-                ext.outputDir = file("\$buildDir/delombok")
+                ext.outputDir = layout.buildDirectory.dir("delombok").get().asFile
                             
                 outputs.dir(outputDir)
                 sourceSets.main.java.srcDirs.each { 

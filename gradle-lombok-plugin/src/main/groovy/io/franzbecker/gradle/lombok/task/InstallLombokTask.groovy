@@ -2,7 +2,6 @@ package io.franzbecker.gradle.lombok.task
 
 import io.franzbecker.gradle.lombok.LombokPlugin
 import io.franzbecker.gradle.lombok.LombokPluginExtension
-import io.franzbecker.gradle.lombok.util.JavaExecCompat
 import org.gradle.api.tasks.JavaExec
 
 /**
@@ -14,7 +13,7 @@ class InstallLombokTask extends JavaExec {
 
     InstallLombokTask() {
         def extension = project.extensions.findByType(LombokPluginExtension)
-        JavaExecCompat.setMainClassConvention(this) { extension.main }
+        mainClass.convention(project.provider { extension.main })
         ignoreExitValue = true
         // compileOnly is not resolvable in recent Gradle versions, use compileClasspath instead
         classpath = project.configurations.getByName(LombokPlugin.VERIFY_LOMBOK_CLASSPATH_CONFIGURATION_NAME)

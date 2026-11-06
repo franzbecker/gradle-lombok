@@ -16,7 +16,7 @@ class InstallLombokTaskSpec extends AbstractJavaExecTaskSpec {
         InstallLombokTask task = project.tasks.getByName(InstallLombokTask.NAME)
 
         then:
-        task.main == 'lombok.launch.Main'
+        task.mainClass.get() == 'lombok.launch.Main'
         task.ignoreExitValue
         task.classpath.files == [lombokJar] as Set
     }

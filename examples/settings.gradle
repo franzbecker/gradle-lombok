@@ -1,5 +1,7 @@
 // this defines a composite build - you won't need this in your project
-includeBuild '../gradle-lombok-plugin'
+pluginManagement {
+    includeBuild '../gradle-lombok-plugin'
+}
 
 rootProject.name = 'examples'
 

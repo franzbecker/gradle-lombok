@@ -1,7 +1,6 @@
 package io.franzbecker.gradle.lombok.task
 
 import io.franzbecker.gradle.lombok.LombokPluginExtension
-import io.franzbecker.gradle.lombok.util.JavaExecCompat
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.JavaExec
@@ -21,7 +20,7 @@ class DelombokTask extends JavaExec {
 
         def extension = project.extensions.findByType(LombokPluginExtension)
         def configurations = project.configurations
-        JavaExecCompat.setMainClassConvention(this) { extension.main }
+        mainClass.convention(project.provider { extension.main })
         // resolved lazily so that compileConfigurationName can still be changed
         classpath({ configurations.getByName(compileConfigurationName) })
     }
