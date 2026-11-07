@@ -5,6 +5,9 @@ on:
     branches: [master]
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -21,3 +24,9 @@ jobs:
       - name: Build examples
         working-directory: examples
         run: ./gradlew build :delombok-gradle-groovy:javadoc :delombok-gradle-kotlin:javadoc
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          files: gradle-lombok-plugin/build/reports/jacoco/test/jacocoTestReport.xml
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: false

@@ -11,8 +11,8 @@
 > The plugin itself is not affected. The plugin ID `io.franzbecker.gradle-lombok` and the group `io.franzbecker` remain unchanged.
 
 [![License](http://img.shields.io/badge/license-Apache_2.0-blue.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0.html)
-[![Build Status](https://app.travis-ci.com/franzbecker/gradle-lombok.svg?branch=master)](https://app.travis-ci.com/franzbecker/gradle-lombok)
-[![codecov.io](http://codecov.io/github/franzbecker/gradle-lombok/coverage.svg?branch=master)](http://codecov.io/github/franzbecker/gradle-lombok?branch=master)
+[![Build](https://github.com/franzbecker/gradle-lombok/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/franzbecker/gradle-lombok/actions/workflows/build.yml)
+[![codecov.io](https://codecov.io/github/franzbecker/gradle-lombok/coverage.svg?branch=master)](https://codecov.io/github/franzbecker/gradle-lombok?branch=master)
 
 
 A Gradle plugin for project [Lombok](https://projectlombok.org) support.
