@@ -69,15 +69,15 @@ class DelombokTaskIntegrationTest extends AbstractIntegrationTest {
         and:
         buildFile << """
             configurations {
-                delombokExtra
+                // deliberately not part of compileClasspath, so delombok only sees it via the extended classpath
+                notOnCompileClasspath
             }
 
             dependencies {
-                compileOnly "com.google.guava:guava:20.0"
-                delombokExtra "com.google.guava:guava:20.0"
+                notOnCompileClasspath "com.google.guava:guava:20.0"
             }
 
-            ${delombokTask("classpath += project.configurations.delombokExtra")}
+            ${delombokTask("classpath += project.configurations.notOnCompileClasspath")}
         """
 
         when:
@@ -112,7 +112,8 @@ class DelombokTaskIntegrationTest extends AbstractIntegrationTest {
         return """
             import io.franzbecker.gradle.lombok.task.DelombokTask
 
-            task delombok(type: DelombokTask, dependsOn: compileJava) {
+            // no dependency on compileJava: delombok only needs the sources and its classpath
+            task delombok(type: DelombokTask) {
                 ext.outputDir = layout.buildDirectory.dir("delombok").get().asFile
                             
                 outputs.dir(outputDir)
