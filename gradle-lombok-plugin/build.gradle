@@ -57,7 +57,8 @@ gradlePlugin {
             displayName = 'Gradle Lombok plugin'
             description = 'A gradle plugin that simplifies the usage of the Lombok annotation processor.'
             implementationClass = 'io.franzbecker.gradle.lombok.LombokPlugin'
-            tags.set(['gradle', 'lombok'])
+            // 'gradle' and 'plugin' are rejected by the Plugin Portal
+            tags.set(['lombok', 'annotation-processing'])
         }
     }
 }
