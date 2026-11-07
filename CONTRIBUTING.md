@@ -30,3 +30,22 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'io.franzbecker.gradle-lombok'
 ```
+
+## Releasing
+
+Releases are published to the [Gradle Plugin Portal](https://plugins.gradle.org/plugin/io.franzbecker.gradle-lombok)
+by the [Release workflow](.github/workflows/release.yml) whenever a tag `v<version>` is pushed.
+
+One-time setup: add the API key and secret from your Plugin Portal account as repository secrets
+`GRADLE_PUBLISH_KEY` and `GRADLE_PUBLISH_SECRET` (Settings → Secrets and variables → Actions).
+
+To release, run on an up-to-date `master` without local changes:
+
+```
+cd gradle-lombok-plugin
+./gradlew release -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=<version>
+```
+
+This sets `version` in `gradle.properties`, updates the version in the README, commits both as
+`[release] ...`, creates the tag `v<version>` and pushes commit and tag. The workflow then checks
+that the tag matches the version in `gradle.properties`, runs the tests and publishes the plugin.

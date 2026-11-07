@@ -2,17 +2,17 @@ package io.franzbecker.gradle.lombok
 
 import io.franzbecker.gradle.lombok.task.InstallLombokTask
 import io.franzbecker.gradle.lombok.task.VerifyLombokTask
-import nebula.test.PluginProjectSpec
+import org.gradle.api.Project
+import org.gradle.testfixtures.ProjectBuilder
+import spock.lang.Specification
 
 /**
  * Unit tests for {@link LombokPlugin}.
  */
-class LombokPluginSpec extends PluginProjectSpec {
+class LombokPluginSpec extends Specification {
 
-    @Override
-    String getPluginName() {
-        return LombokPlugin.NAME
-    }
+    String pluginName = LombokPlugin.NAME
+    Project project = ProjectBuilder.builder().build()
 
     private def applyJavaAndLombok() {
         project.apply plugin: "java"

@@ -1,0 +1,38 @@
+name: Release
+
+# Publishes the plugin to the Gradle Plugin Portal when a release tag is pushed.
+# The tag is created by `./gradlew release` (net.researchgate.release), see CONTRIBUTING.md.
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Verify tag matches the project version
+        working-directory: gradle-lombok-plugin
+        run: |
+          version=$(sed -n 's/^version=//p' gradle.properties)
+          if [ "v${version}" != "${GITHUB_REF_NAME}" ]; then
+            echo "::error::Tag ${GITHUB_REF_NAME} does not match version=${version} in gradle.properties"
+            exit 1
+          fi
+      - name: Check plugin
+        working-directory: gradle-lombok-plugin
+        run: ./gradlew check
+      - name: Publish to the Gradle Plugin Portal
+        working-directory: gradle-lombok-plugin
+        run: ./gradlew publishPlugins
+        env:
+          GRADLE_PUBLISH_KEY: ${{ secrets.GRADLE_PUBLISH_KEY }}
+          GRADLE_PUBLISH_SECRET: ${{ secrets.GRADLE_PUBLISH_SECRET }}

@@ -68,12 +68,8 @@ class VerifyLombokTaskSpec extends Specification {
     }
 
     def "Skips the check if no hash has been configured"() {
-        given:
-        def extension = new LombokPluginExtension()
-        extension.sha256 = ''
-
         when:
-        task.verifyLombok(extension, configuration)
+        task.verifyLombok(LombokPluginExtension.DEFAULT_VERSION, '', configuration)
 
         then:
         noExceptionThrown()

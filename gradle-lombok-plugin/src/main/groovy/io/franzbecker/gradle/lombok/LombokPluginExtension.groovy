@@ -6,8 +6,8 @@ package io.franzbecker.gradle.lombok
 class LombokPluginExtension {
 
     static final String NAME = "lombok"
-    static final String DEFAULT_VERSION = "1.18.12"
-    static final String DEFAULT_VERSION_HASH = "49381508ecb02b3c173368436ef71b24c0d4418ad260e6cc98becbcf4b345406"
+    static final String DEFAULT_VERSION = "1.18.48"
+    static final String DEFAULT_VERSION_HASH = "85477a4655ebb2c074a9099cfb749be454449fee564d4282610df1b85f7c508b"
 
     /** The version of Lombok to use. */
     String version = DEFAULT_VERSION
