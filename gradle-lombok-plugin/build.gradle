@@ -59,6 +59,12 @@ gradlePlugin {
             implementationClass = 'io.franzbecker.gradle.lombok.LombokPlugin'
             // 'gradle' and 'plugin' are rejected by the Plugin Portal
             tags.set(['lombok', 'annotation-processing'])
+            compatibility {
+                features {
+                    // covered by CompatibilityIntegrationTest
+                    configurationCache = true
+                }
+            }
         }
     }
 }
