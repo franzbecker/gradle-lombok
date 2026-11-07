@@ -93,4 +93,8 @@ release {
     preTagCommitMessage = '[release] '
     tagCommitMessage = '[release] '
     tagTemplate = 'v${version}'
+    git {
+        // release plugin 3.x defaults to 'main'
+        requireBranch.set('master')
+    }
 }
